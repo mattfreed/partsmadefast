@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U.S.A. Parts Made Fast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --surface3: #222;
+    --border: #2a2a2a;
+    --accent: #e8a020;
+    --accent2: #c0392b;
+    --text: #e8e8e8;
+    --muted: #888;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 3px solid var(--accent);
+    padding: 24px 40px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .flag-stripe { display: flex; gap: 4px; margin-bottom: 8px; }
+  .flag-stripe span { display: block; height: 5px; border-radius: 2px; }
+  .flag-stripe .red   { background: #b22234; width: 40px; }
+  .flag-stripe .white { background: #eee;    width: 40px; }
+  .flag-stripe .blue  { background: #3c3b6e; width: 40px; }
+  h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 44px; font-weight: 900;
+    letter-spacing: 1px; line-height: 1;
+    color: #fff; text-transform: uppercase;
+  }
+  h1 span { color: var(--accent); }
+  .tagline { margin-top: 8px; color: var(--muted); font-size: 14px; max-width: 520px; line-height: 1.6; }
+  .header-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; padding-top: 4px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 18px; border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    text-transform: uppercase; cursor: pointer; border: none;
+    text-decoration: none; transition: all 0.15s; white-space: nowrap;
+  }
+  .btn-primary  { background: var(--accent); color: #000; }
+  .btn-primary:hover  { background: #f5b840; }
+  .btn-outline  { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-outline:hover  { border-color: var(--accent); color: var(--accent); }
+  .btn-danger   { background: var(--accent2); color: #fff; font-size: 12px; padding: 5px 10px; }
+  .btn-danger:hover   { background: #e74c3c; }
+  .btn-warn     { background: #2c1f05; color: var(--accent); border: 1.5px solid var(--accent); font-size: 12px; padding: 5px 10px; }
+  .btn-warn:hover     { background: var(--accent); color: #000; }
+  .btn-instant  { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+  .btn-instant:hover  { border-color: #4ade80; color: #4ade80; }
+  .btn-instant.active { background: #052e16; color: #4ade80; border-color: #166534; }
+  .btn-uber     { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+  .btn-uber:hover     { border-color: #c4b5fd; color: #c4b5fd; }
+  .btn-uber.active    { background: #1a0a2e; color: #c4b5fd; border-color: #6d28d9; }
+  .btn-nda      { background: transparent; color: var(--muted); border: 1.5px solid var(--border); }
+  .btn-nda:hover      { border-color: #67e8f9; color: #67e8f9; }
+  .btn-nda.active     { background: #0a1a1a; color: #67e8f9; border-color: #0e7490; }
+
+  /* TOOLBAR */
+  .toolbar {
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+  }
+
+  /* Search */
+  .search-wrap { position: relative; flex: 1; min-width: 160px; max-width: 260px; }
+  .search-wrap .ico {
+    position: absolute; left: 11px; top: 50%;
+    transform: translateY(-50%); color: var(--muted); font-size: 14px; pointer-events: none;
+  }
+  .search-wrap input {
+    width: 100%; background: var(--surface);
+    border: 1.5px solid var(--border); border-radius: 4px;
+    color: var(--text); font-family: 'Barlow', sans-serif;
+    font-size: 14px; padding: 8px 12px 8px 32px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-wrap input:focus { border-color: var(--accent); }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  /* Dropdowns */
+  .dropdown-wrap { position: relative; }
+  .dropdown-trigger {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 4px; color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
+    padding: 8px 14px; cursor: pointer; white-space: nowrap;
+    min-width: 180px; justify-content: space-between;
+    transition: border-color 0.15s; user-select: none;
+  }
+  .dropdown-trigger:hover,
+  .dropdown-trigger.open { border-color: var(--accent); color: var(--accent); }
+  .dropdown-trigger .arrow { font-size: 10px; transition: transform 0.2s; opacity: 0.6; }
+  .dropdown-trigger.open .arrow { transform: rotate(180deg); }
+  .dropdown-trigger .selected-val { flex: 1; text-align: left; overflow: hidden; text-overflow: ellipsis; }
+
+  .dropdown-menu {
+    display: none; position: absolute; top: calc(100% + 4px); left: 0;
+    min-width: 100%; background: var(--surface2);
+    border: 1.5px solid var(--accent); border-radius: 4px;
+    z-index: 200; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  }
+  .dropdown-menu.open { display: block; }
+  .dropdown-search { padding: 8px; border-bottom: 1px solid var(--border); }
+  .dropdown-search input {
+    width: 100%; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 3px; color: var(--text);
+    font-family: 'Barlow', sans-serif; font-size: 13px;
+    padding: 6px 10px; outline: none;
+  }
+  .dropdown-search input:focus { border-color: var(--accent); }
+  .dropdown-search input::placeholder { color: var(--muted); }
+  .dropdown-list { max-height: 260px; overflow-y: auto; }
+  .dropdown-list::-webkit-scrollbar { width: 4px; }
+  .dropdown-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .dropdown-item {
+    padding: 9px 14px; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; gap: 8px;
+    transition: background 0.1s; white-space: nowrap;
+  }
+  .dropdown-item:hover { background: var(--surface3); color: var(--accent); }
+  .dropdown-item.selected { color: var(--accent); background: #1a1200; }
+  .dropdown-item.all-option { color: var(--muted); border-bottom: 1px solid var(--border); font-style: italic; }
+  .dropdown-item.all-option.selected { color: var(--accent); }
+
+  .divider { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; }
+
+  .clear-btn {
+    background: none; border: none; color: var(--muted);
+    font-size: 12px; font-family: 'Barlow', sans-serif;
+    cursor: pointer; text-decoration: underline; white-space: nowrap;
+  }
+  .clear-btn:hover { color: var(--accent); }
+
+  .result-bar { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+  .result-bar strong { color: var(--accent); }
+
+  /* MAIN */
+  main { max-width: 1200px; margin: 0 auto; padding: 36px 40px 80px; }
+
+  .category-section { margin-bottom: 48px; }
+  .category-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .category-icon {
+    font-size: 20px; width: 40px; height: 40px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0;
+  }
+  .category-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px; color: #fff;
+  }
+  .category-count { margin-left: auto; font-size: 12px; color: var(--muted); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+  .section-stripe { height: 1px; background: linear-gradient(to right, var(--accent), transparent); margin-bottom: 16px; opacity: 0.35; }
+
+  .mfr-list { display: flex; flex-direction: column; gap: 2px; }
+  .mfr-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid transparent; border-radius: 4px;
+    padding: 12px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    transition: all 0.15s;
+    animation: fadeIn 0.2s ease both;
+  }
+  .mfr-card:hover { background: var(--surface2); border-left-color: var(--accent); }
+  .mfr-card-top {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .mfr-card-bottom {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    padding-top: 4px; border-top: 1px solid var(--border);
+  }
+  .mfr-machines {
+    font-size: 12px;
+    font-family: 'Barlow', sans-serif;
+    color: var(--muted);
+    flex: 1;
+  }
+  .mfr-machines strong {
+    color: #777;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .mfr-name {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 20px;
+    font-weight: 700; color: #fff; text-decoration: none;
+    transition: color 0.15s;
+  }
+  .mfr-name:hover { color: var(--accent); }
+  .mfr-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1; }
+  .mfr-location {
+    font-size: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    color: #9ca3af;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .mfr-dims {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    text-transform: uppercase;
+    white-space: nowrap;
+    align-self: center;
+    line-height: 1.5;
+    text-align: right;
+    margin-left: auto;
+  }
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 3px; font-size: 12px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap;
+  }
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px; border-radius: 3px; font-size: 12px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap;
+  }
+  .tag-state        { background: #111827; border: 1px solid #374151; color: #9ca3af; }
+  .tag-instant      { background: #052e16; border: 1px solid #166534; color: #4ade80; }
+  .tag-manual       { background: #172554; border: 1px solid #1e40af; color: #93c5fd; }
+  .tag-online-manual{ background: #172554; border: 1px solid #1e40af; color: #93c5fd; }
+  .tag-email        { background: #1c1008; border: 1px solid #78350f; color: #fbbf24; }
+  .tag-uber         { background: #1a0a2e; border: 1px solid #6d28d9; color: #c4b5fd; }
+  .tag-nda          { background: #0a1a1a; border: 1px solid #0e7490; color: #67e8f9; }
+  .tag-dims         { background: #111; border: 1px solid #333; color: #666; font-size: 11px; }
+  .mfr-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .add-info-btn {
+    background: none;
+    border: 1px dashed #555;
+    border-radius: 3px;
+    color: #777;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+  }
+  .add-info-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .mfr-dims {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    text-transform: uppercase;
+    white-space: nowrap;
+    align-self: center;
+    line-height: 1.5;
+    text-align: right;
+  }
+
+  /* Empty state */
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 22px; margin-bottom: 8px; color: var(--text); }
+
+  /* MODALS */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85); z-index: 1000;
+    justify-content: center; align-items: center; padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: var(--surface); border: 1px solid var(--border);
+    border-top: 3px solid var(--accent); border-radius: 6px;
+    padding: 32px; max-width: 480px; width: 100%; position: relative;
+  }
+  .modal h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; }
+  .modal p { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .modal .close-btn { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; }
+  .modal .close-btn:hover { color: #fff; }
+  .modal-options { display: flex; flex-direction: column; gap: 12px; }
+  .modal-option-btn {
+    display: flex; align-items: center; gap: 12px; padding: 16px;
+    background: var(--surface2); border: 1.5px solid var(--border);
+    border-radius: 6px; cursor: pointer; text-decoration: none;
+    color: var(--text); transition: all 0.15s;
+  }
+  .modal-option-btn:hover { border-color: var(--accent); background: #1a1200; }
+  .modal-option-btn .opt-icon { font-size: 24px; flex-shrink: 0; }
+  .modal-option-btn .opt-label { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; }
+  .modal-option-btn .opt-sub { font-size: 12px; color: var(--muted); }
+
+  /* FOOTER */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 40px; text-align: center; color: var(--muted); font-size: 13px; }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* REPORT COUNTERS */
+  .mfr-report-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+  .report-counter {
+    font-size: 11px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+
+
+  @media (max-width: 768px) {
+    header { padding: 20px; }
+    h1 { font-size: 32px; }
+    .toolbar { padding: 10px 16px; gap: 8px; }
+    main { padding: 24px 16px 60px; }
+    .search-wrap { max-width: 100%; min-width: 100%; }
+    .dropdown-trigger { min-width: 140px; }
+    .mfr-card { flex-direction: column; align-items: flex-start; }
+    .mfr-actions { margin-left: 0; flex-wrap: wrap; }
+    .result-bar { order: -1; width: 100%; margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="flag-stripe">
+      <span class="red"></span><span class="white"></span><span class="blue"></span>
+    </div>
+    <h1>U.S.A. <span>Parts Made Fast</span></h1>
+    <p class="tagline">U.S.-based manufacturers offering quick-turn solutions.<br>Parts delivered to your door <strong>in under 7 days</strong>.</p>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-primary" onclick="openModal('submit-modal')">➕ Submit Manufacturer</button>
+    <button class="btn btn-outline" onclick="openModal('feedback-modal')">⚑ Report a Manufacturer</button>
+  </div>
+</header>
+
+<!-- ALWAYS-VISIBLE TOOLBAR -->
+<div class="toolbar">
+
+  <!-- Text search -->
+  <div class="search-wrap">
+    <span class="ico">🔍</span>
+    <input type="text" id="search-input" placeholder="Search processes…" oninput="applyFilters()">
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Process dropdown -->
+  <div class="dropdown-wrap" id="process-wrap">
+    <div class="dropdown-trigger" id="process-trigger" onclick="toggleDropdown('process')">
+      <span class="selected-val" id="process-label">All Processes</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="dropdown-menu" id="process-menu">
+      <div class="dropdown-search">
+        <input type="text" placeholder="Search process…" oninput="filterDropdownItems('process', this.value)">
+      </div>
+      <div class="dropdown-list" id="process-list"></div>
+    </div>
+  </div>
+
+  <!-- State dropdown -->
+  <div class="dropdown-wrap" id="state-wrap">
+    <div class="dropdown-trigger" id="state-trigger" onclick="toggleDropdown('state')">
+      <span class="selected-val" id="state-label">All States</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="dropdown-menu" id="state-menu">
+      <div class="dropdown-search">
+        <input type="text" placeholder="Search state…" oninput="filterDropdownItems('state', this.value)">
+      </div>
+      <div class="dropdown-list" id="state-list"></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Instant quote toggle -->
+  <button class="btn btn-instant" id="instant-btn" onclick="toggleInstant()">⚡ Instant Quote Only</button>
+
+  <!-- Uber carrier toggle -->
+  <button class="btn btn-uber" id="uber-btn" onclick="toggleUber()">🚗 Uber Courier Available</button>
+
+  <!-- Next Day Air toggle -->
+  <button class="btn btn-nda" id="nda-btn" onclick="toggleNda()">✈️ Next Day Air</button>
+
+  <!-- Clear -->
+  <button class="clear-btn" id="clear-btn" onclick="clearFilters()" style="display:none">✕ Clear filters</button>
+
+
+</div>
+
+<!-- MAIN -->
+<main id="main-content"></main>
+
+<!-- FOOTER -->
+<footer>
+  <p>🇺🇸 <strong>U.S.A. Parts Made Fast</strong> — A community-curated directory of quick-turn American manufacturers.</p>
+  <p style="margin-top:6px;">Something missing? <a href="#" onclick="openModal('submit-modal');return false;">Submit a manufacturer</a> · <a href="#" onclick="openModal('feedback-modal');return false;">Report a manufacturer</a></p>
+</footer>
+
+<!-- SUBMIT MODAL -->
+<div class="modal-overlay" id="submit-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('submit-modal')">✕</button>
+    <h3>Submit a Manufacturer</h3>
+    <p>Know a U.S. shop that delivers parts in under 7 days? Submit it and we'll review it for the directory.</p>
+    <div class="modal-options">
+      <a class="modal-option-btn" id="submit-link" href="#" target="_blank">
+        <span class="opt-icon">🏭</span>
+        <div>
+          <div class="opt-label">Submit New Manufacturer</div>
+          <div class="opt-sub">Shop name, URL, state, capabilities &amp; quote type</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal-overlay" id="feedback-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('feedback-modal')">✕</button>
+    <h3>Report a Manufacturer</h3>
+    <p>Help keep this list accurate — report a manufacturer that isn't actually fast or competitive.</p>
+    <div class="modal-options">
+      <a class="modal-option-btn" id="not-faster-link" href="#" target="_blank">
+        <span class="opt-icon">🐢</span>
+        <div>
+          <div class="opt-label">Not Faster Than China</div>
+          <div class="opt-sub">Report lead time + shipping comparison vs. a China supplier</div>
+        </div>
+      </a>
+      <a class="modal-option-btn" id="not-competitive-link" href="#" target="_blank">
+        <span class="opt-icon">💸</span>
+        <div>
+          <div class="opt-label">Quote Not Competitive</div>
+          <div class="opt-sub">Report pricing comparison vs. a China supplier</div>
+        </div>
+      </a>
+      <a class="modal-option-btn" id="beyond-7-link" href="#" target="_blank">
+        <span class="opt-icon">📅</span>
+        <div>
+          <div class="opt-label">Quote Well Beyond 7 Days</div>
+          <div class="opt-sub">Report a lead time quoted over 7 days</div>
+        </div>
+      </a>
+      <a class="modal-option-btn" id="incorrect-info-link" href="#" target="_blank">
+        <span class="opt-icon">⚠️</span>
+        <div>
+          <div class="opt-label">Incorrect / Update Information</div>
+          <div class="opt-sub">Report any inaccurate details about a manufacturer</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- PER-CARD CHINA MODAL -->
+<div class="modal-overlay" id="china-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('china-modal')">✕</button>
+    <h3 id="china-modal-title">Report</h3>
+    <p id="china-modal-sub"></p>
+    <div class="modal-options">
+      <a class="modal-option-btn" id="china-modal-link" href="#" target="_blank">
+        <span class="opt-icon">📝</span>
+        <div>
+          <div class="opt-label">Open Report Form</div>
+          <div class="opt-sub">Manufacturer name is pre-filled. Add supplier &amp; details.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── FORM LINKS — replace with your real Google Form URLs ──
+const FORM_LINKS = {
+  submit:         "https://docs.google.com/forms/d/e/YOUR_SUBMIT_FORM_ID/viewform",
+  notFaster:      "https://docs.google.com/forms/d/e/YOUR_NOT_FASTER_FORM_ID/viewform",
+  notCompetitive: "https://docs.google.com/forms/d/e/YOUR_NOT_COMPETITIVE_FORM_ID/viewform",
+  beyond7:        "https://docs.google.com/forms/d/e/YOUR_BEYOND_7_FORM_ID/viewform",
+  incorrectInfo:  "https://docs.google.com/forms/d/e/YOUR_INCORRECT_INFO_FORM_ID/viewform",
+};
+document.getElementById('submit-link').href          = FORM_LINKS.submit;
+document.getElementById('not-faster-link').href      = FORM_LINKS.notFaster;
+document.getElementById('not-competitive-link').href = FORM_LINKS.notCompetitive;
+document.getElementById('beyond-7-link').href        = FORM_LINKS.beyond7;
+document.getElementById('incorrect-info-link').href  = FORM_LINKS.incorrectInfo;
+
+// ── DATA ──
+// quote: "instant" | "online-manual" | "email"
+// minDims/maxDims: part size strings or null
+// uber: bool, nda: bool
+// machines: { "Category Name": ["Machine A", "Machine B"] }
+const manufacturers = [
+  { name: "Xometry",                url: "https://www.xometry.com",            city: "Gaithersburg",     state: "MD", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis", "5-axis"], "Turning": ["CNC Lathe"], "Sheet Metal Fabrication": ["Press Brake", "Laser"], "3D Printing": ["FDM", "SLA", "SLS"], "Injection Molding": ["Injection Press"] }, categories: ["CNC Machining","Sheet Metal Fabrication","3D Printing","Injection Molding","Urethane Casting","Laser Cutting","Turning"] },
+  { name: "Fictiv",                 url: "https://www.fictiv.com",             city: "San Francisco",    state: "CA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "5-axis"], "Turning": ["CNC Lathe"], "3D Printing": ["FDM", "SLA", "DMLS"] }, categories: ["CNC Machining","3D Printing","Injection Molding","Urethane Casting","Turning"] },
+  { name: "Plethora",               url: "https://www.plethora.com",           city: "San Francisco",    state: "CA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '24" x 16" x 8"',  machines: { "CNC Machining": ["3-axis", "4-axis"] }, categories: ["CNC Machining"] },
+  { name: "ProtoLabs",              url: "https://www.protolabs.com",          city: "Maple Plain",      state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: '40" x 20" x 12"', machines: { "CNC Machining": ["3-axis", "5-axis"], "Turning": ["CNC Lathe", "Swiss Lathe"], "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "Injection Molding": ["Injection Press"], "Sheet Metal Fabrication": ["Press Brake", "Laser"] }, categories: ["CNC Machining","3D Printing","Injection Molding","Sheet Metal Fabrication","Turning"] },
+  { name: "Hubs",                   url: "https://www.hubs.com",               city: "Detroit",          state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis", "5-axis"], "Turning": ["CNC Lathe"], "3D Printing": ["FDM", "SLA", "SLS"] }, categories: ["CNC Machining","Sheet Metal Fabrication","3D Printing","Injection Molding","Turning"] },
+  { name: "MachinedParts",          url: "https://www.machinedparts.com",      city: "Houston",          state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis"], "Turning": ["CNC Lathe"] }, categories: ["CNC Machining","Turning"] },
+  { name: "eMachineShop",           url: "https://www.emachineshop.com",       city: "Mahwah",           state: "NJ", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "CNC Machining": ["3-axis", "4-axis"], "Laser Cutting": ["CO2 Laser"], "Waterjet Cutting": ["Waterjet"] }, categories: ["CNC Machining","Sheet Metal Fabrication","Laser Cutting","Waterjet Cutting"] },
+  { name: "SendCutSend",            url: "https://sendcutsend.com",            city: "Reno",             state: "NV", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '46" x 30"',       machines: { "CNC Machining": ["CNC Router"], "Laser Cutting": ["Fiber Laser", "CO2 Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake", "Roller"] }, categories: ["CNC Machining","Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
+  { name: "OSH Cut",                url: "https://www.oshcut.com",             city: "Columbus",         state: "OH", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '60" x 120"',      machines: { "Laser Cutting": ["Fiber Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake"] }, categories: ["Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
+  { name: "MetalSpark",             url: "https://metalspark.com",             city: "Los Angeles",      state: "CA", quote: "instant",       uber: true,  nda: false, minDims: null,           maxDims: null,             machines: { "Sheet Metal Fabrication": ["Press Brake", "Roller"], "Laser Cutting": ["Fiber Laser"] }, categories: ["Sheet Metal Fabrication","Laser Cutting"] },
+  { name: "Kansas City Structural", url: "https://www.kcstructural.com",       city: "Kansas City",      state: "MO", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Welding & Assembly": ["MIG", "TIG", "Stick"], "Sheet Metal Fabrication": ["Press Brake", "Shear"] }, categories: ["Welding & Assembly","Sheet Metal Fabrication","Raw Materials"] },
+  { name: "Big Blue Saw",           url: "https://www.bigbluesaw.com",         city: "Peachtree City",   state: "GA", quote: "instant",       uber: false, nda: false, minDims: '0.5" x 0.5"', maxDims: '60" x 120"',      machines: { "Waterjet Cutting": ["Waterjet"], "Laser Cutting": ["CO2 Laser"] }, categories: ["Waterjet Cutting","Laser Cutting"] },
+  { name: "Accutek",                url: "https://www.accutekwaterjet.com",    city: "San Diego",        state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: '60" x 120"',      machines: { "Waterjet Cutting": ["Waterjet", "Abrasive Waterjet"] }, categories: ["Waterjet Cutting"] },
+  { name: "Rapid EDM",              url: "https://www.rapidedm.com",           city: "Chatsworth",       state: "CA", quote: "online-manual", uber: true,  nda: true,  minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "Wire EDM": ["Wire EDM", "Sinker EDM"], "CNC Machining": ["3-axis", "4-axis"] }, categories: ["Wire EDM","CNC Machining"] },
+  { name: "Owens Industries",       url: "https://www.owensindustries.com",    city: "New Berlin",       state: "WI", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Wire EDM": ["Wire EDM", "Sinker EDM", "Hole Drilling EDM"], "CNC Machining": ["3-axis", "5-axis"] }, categories: ["Wire EDM","CNC Machining"] },
+  { name: "Stratasys Direct",       url: "https://www.stratasysdirect.com",    city: "Eden Prairie",     state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS", "PolyJet"] }, categories: ["3D Printing"] },
+  { name: "Formlabs",               url: "https://formlabs.com",               city: "Somerville",       state: "MA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '14" x 9" x 14"',  machines: { "3D Printing": ["SLA", "SLS", "FDM"] }, categories: ["3D Printing"] },
+  { name: "Fast Radius",            url: "https://www.fastradius.com",         city: "Chicago",          state: "IL", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "CNC Machining": ["3-axis", "5-axis"], "Injection Molding": ["Injection Press"] }, categories: ["3D Printing","CNC Machining","Injection Molding"] },
+  { name: "Midwest Prototyping",    url: "https://www.midwestprototyping.com", city: "Blue Mounds",      state: "WI", quote: "online-manual", uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS"], "CNC Machining": ["3-axis"] }, categories: ["3D Printing","CNC Machining"] },
+  { name: "Shapeways",              url: "https://www.shapeways.com",          city: "New York",         state: "NY", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["SLS", "SLA", "FDM", "MJF"] }, categories: ["3D Printing"] },
+  { name: "Xcentric Mold",          url: "https://www.xcentricmold.com",       city: "Clinton Township", state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press", "Insert Molding"] }, categories: ["Injection Molding"] },
+  { name: "FirstMold",              url: "https://firstmold.com",              city: "Dallas",           state: "TX", quote: "online-manual", uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press"], "CNC Machining": ["3-axis", "5-axis"] }, categories: ["Injection Molding","CNC Machining"] },
+  { name: "Laserworx",              url: "https://www.laserworx.com",          city: "Austin",           state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Laser Cutting": ["CO2 Laser", "Fiber Laser"] }, categories: ["Laser Cutting"] },
+  { name: "OSH Park",               url: "https://oshpark.com",                city: "Portland",         state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"] }, categories: ["PCB Fabrication"] },
+  { name: "Advanced Circuits",      url: "https://www.4pcb.com",               city: "Aurora",           state: "CO", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling", "Drill Press"], "PCBA": ["Pick & Place", "Reflow Oven"] }, categories: ["PCB Fabrication","PCBA"] },
+  { name: "Sunstone Circuits",      url: "https://www.sunstone.com",           city: "Mulino",           state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"], "PCBA": ["Pick & Place", "Reflow Oven", "Wave Solder"] }, categories: ["PCB Fabrication","PCBA"] },
+  { name: "Casting Dynamics",       url: "https://www.castingdynamics.com",    city: "Twinsburg",        state: "OH", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Casting & Forging": ["Die Cast", "Sand Cast"] }, categories: ["Casting & Forging"] },
+  { name: "Precision Castparts",    url: "https://www.precast.com",            city: "Portland",         state: "OR", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Casting & Forging": ["Investment Cast", "Die Cast"] }, categories: ["Casting & Forging"] },
+  { name: "TechniCoil",             url: "https://www.technicoil.com",         city: "Elk Grove Village",state: "IL", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Tube & Pipe Bending": ["CNC Tube Bender", "Mandrel Bender"], "Sheet Metal Fabrication": ["Press Brake"] }, categories: ["Tube & Pipe Bending","Sheet Metal Fabrication"] },
+  { name: "Bend Works",             url: "https://www.bendworks.com",          city: "Gardena",          state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Tube & Pipe Bending": ["CNC Tube Bender", "Roll Bender"] }, categories: ["Tube & Pipe Bending"] },
+  { name: "Surface Solutions",      url: "https://surfacesolutionsinc.com",    city: "San Antonio",      state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Surface Finishing": ["Anodizing", "Powder Coat", "Plating"] }, categories: ["Surface Finishing"] },
+  { name: "Ano-Coil Corp",          url: "https://www.anocoil.com",            city: "Windsor",          state: "CT", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Surface Finishing": ["Anodizing", "Hard Coat Anodizing"] }, categories: ["Surface Finishing"] },
+  { name: "Urethane Supply",        url: "https://www.urethanesupplyco.com",   city: "Dayton",           state: "OH", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Urethane Casting": ["Vacuum Cast"] }, categories: ["Urethane Casting"] },
+  { name: "Casting Concepts",       url: "https://www.castingconcepts.com",    city: "Azusa",            state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Urethane Casting": ["Vacuum Cast", "RTV Mold"] }, categories: ["Urethane Casting"] },
+];
+
+const allCategories = [
+  { name: "CNC Machining",          icon: "⚙️" },
+  { name: "Turning",                icon: "🔁" },
+  { name: "Wire EDM",               icon: "⚡" },
+  { name: "Casting & Forging",      icon: "🔥" },
+  { name: "Sheet Metal Fabrication",icon: "🔩" },
+  { name: "Waterjet Cutting",       icon: "💧" },
+  { name: "Laser Cutting",          icon: "🔦" },
+  { name: "3D Printing",            icon: "🖨️" },
+  { name: "Injection Molding",      icon: "🧪" },
+  { name: "Urethane Casting",       icon: "🧫" },
+  { name: "Extrusion",              icon: "📏" },
+  { name: "Tube & Pipe Bending",    icon: "🔄" },
+  { name: "Welding & Assembly",     icon: "🔧" },
+  { name: "Surface Finishing",      icon: "✨" },
+  { name: "PCB Fabrication",        icon: "🔌" },
+  { name: "PCBA",                   icon: "🖥️" },
+  { name: "Raw Materials",           icon: "🏗️" },
+];
+
+// ── FILTER STATE ──
+let selectedProcess = null;
+let selectedState   = null;
+let instantOnly     = false;
+let uberOnly        = false;
+let ndaOnly         = false;
+
+// ── BUILD DROPDOWNS ──
+function buildDropdowns() {
+  const procList = document.getElementById('process-list');
+  procList.innerHTML =
+    `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('process',null,'All Processes')">All Processes</div>` +
+    allCategories.map(c =>
+      `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.icon} ${c.name.replace(/'/g,"\\'")}')">${c.icon} ${c.name}</div>`
+    ).join('');
+
+  const states = [...new Set(manufacturers.map(m => m.state))].sort();
+  const stateList = document.getElementById('state-list');
+  stateList.innerHTML =
+    `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('state',null,'All States')">All States</div>` +
+    states.map(s =>
+      `<div class="dropdown-item" data-value="${s}" onclick="selectDropdown('state','${s}','📍 ${s}')">📍 ${s}</div>`
+    ).join('');
+}
+
+function toggleDropdown(id) {
+  const menu    = document.getElementById(id + '-menu');
+  const trigger = document.getElementById(id + '-trigger');
+  const isOpen  = menu.classList.contains('open');
+  document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+  document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('open'));
+  if (!isOpen) {
+    menu.classList.add('open');
+    trigger.classList.add('open');
+    const si = menu.querySelector('input');
+    if (si) { si.value = ''; filterDropdownItems(id, ''); si.focus(); }
+  }
+}
+
+function selectDropdown(type, value, label) {
+  if (type === 'process') {
+    selectedProcess = value;
+    document.getElementById('process-label').textContent = label;
+    document.querySelectorAll('#process-list .dropdown-item').forEach(el =>
+      el.classList.toggle('selected', el.dataset.value === (value || '')));
+    document.getElementById('process-menu').classList.remove('open');
+    document.getElementById('process-trigger').classList.remove('open');
+  } else {
+    selectedState = value;
+    document.getElementById('state-label').textContent = label;
+    document.querySelectorAll('#state-list .dropdown-item').forEach(el =>
+      el.classList.toggle('selected', el.dataset.value === (value || '')));
+    document.getElementById('state-menu').classList.remove('open');
+    document.getElementById('state-trigger').classList.remove('open');
+  }
+  applyFilters();
+}
+
+function filterDropdownItems(id, query) {
+  const q = query.toLowerCase();
+  document.getElementById(id + '-list').querySelectorAll('.dropdown-item').forEach(el => {
+    if (el.classList.contains('all-option')) { el.style.display = ''; return; }
+    el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function toggleInstant() {
+  instantOnly = !instantOnly;
+  document.getElementById('instant-btn').classList.toggle('active', instantOnly);
+  applyFilters();
+}
+
+function toggleUber() {
+  uberOnly = !uberOnly;
+  document.getElementById('uber-btn').classList.toggle('active', uberOnly);
+  applyFilters();
+}
+
+function toggleNda() {
+  ndaOnly = !ndaOnly;
+  document.getElementById('nda-btn').classList.toggle('active', ndaOnly);
+  applyFilters();
+}
+
+function clearFilters() {
+  selectedProcess = null; selectedState = null; instantOnly = false; uberOnly = false; ndaOnly = false;
+  document.getElementById('search-input').value = '';
+  document.getElementById('process-label').textContent = 'All Processes';
+  document.getElementById('state-label').textContent   = 'All States';
+  document.getElementById('instant-btn').classList.remove('active');
+  document.getElementById('uber-btn').classList.remove('active');
+  document.getElementById('nda-btn').classList.remove('active');
+  document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
+  document.querySelectorAll('#state-list .dropdown-item').forEach(el  => el.classList.toggle('selected', el.dataset.value === ''));
+  applyFilters();
+}
+
+// ── RENDER ──
+function applyFilters() {
+  const query = document.getElementById('search-input').value.toLowerCase().trim();
+  const isFiltered = selectedProcess || selectedState || instantOnly || uberOnly || ndaOnly || query;
+  document.getElementById('clear-btn').style.display = isFiltered ? '' : 'none';
+
+  const catsToShow = shuffle(selectedProcess
+    ? allCategories.filter(c => c.name === selectedProcess)
+    : [...allCategories]);
+
+  let totalVisible = 0;
+  const html = catsToShow.map(cat => {
+    // search filters by category/process name
+    if (query && !cat.name.toLowerCase().includes(query)) return '';
+
+    const matching = manufacturers.filter(m => {
+      if (!m.categories.includes(cat.name)) return false;
+      if (selectedState && m.state !== selectedState) return false;
+      if (instantOnly && m.quote !== 'instant') return false;
+      if (uberOnly && !m.uber) return false;
+      if (ndaOnly && !m.nda) return false;
+      return true;
+    });
+    if (!matching.length) return '';
+    totalVisible += matching.length;
+
+    const pins = (pinnedTop[cat.name] || [])
+      .map(n => matching.find(m => m.name === n))
+      .filter(Boolean);
+    const rest = shuffle(matching.filter(m => !pins.includes(m)));
+    const ordered = [...pins, ...rest];
+
+    const cards = ordered.map((m, i) => {
+      const nfCount = getCount(m.name, 0);
+      const ncCount = getCount(m.name, 1);
+
+      const machineList = (m.machines && m.machines[cat.name]) ? m.machines[cat.name].join(', ') : null;
+      const addInfoUrl = `${FORM_LINKS.incorrectInfo}?entry.mfr=${encodeURIComponent(m.name)}`;
+      const addBtn = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Info</a>`;
+
+      const machinesHtml = `<div class="mfr-machines"><strong>Machines:</strong>${machineList ? machineList : addBtn}</div>`;
+
+      const dimsHtml = `<div class="mfr-dims">${
+        m.maxDims ? `Max: ${m.maxDims}` : `Max: ${addBtn}`
+      }<br>${
+        m.minDims ? `Min: ${m.minDims}` : `Min: ${addBtn}`
+      }</div>`;
+
+      return `
+      <div class="mfr-card" style="animation-delay:${i*0.03}s">
+        <div class="mfr-card-top">
+          <a class="mfr-name" href="${m.url}" target="_blank" rel="noopener">${m.name} ↗</a>
+          <div class="mfr-meta">
+            ${m.quote==='instant'
+              ? '<span class="tag tag-instant">⚡ Instant Quote</span>'
+              : m.quote==='online-manual'
+              ? '<span class="tag tag-online-manual">🖥️ Online Manual Quote</span>'
+              : '<span class="tag tag-email">✉️ Email Quote</span>'}
+            ${m.uber ? '<span class="tag tag-uber">🚗 Uber Courier</span>' : ''}
+            ${m.nda  ? '<span class="tag tag-nda">✈️ Next Day Air</span>'  : ''}
+          </div>
+        </div>
+        <div class="mfr-card-bottom">
+          <div class="mfr-location">📍 ${m.city}, ${m.state}</div>
+          ${machinesHtml}
+          ${dimsHtml}
+        </div>
+      </div>`;
+    }).join('');
+
+    return `
+      <div class="category-section">
+        <div class="category-header">
+          <div class="category-icon">${cat.icon}</div>
+          <span class="category-title">${cat.name}</span>
+        </div>
+        <div class="section-stripe"></div>
+        <div class="mfr-list">${cards}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('main-content').innerHTML = html ||
+    `<div class="empty-state">
+       <div class="empty-icon">🔍</div>
+       <h3>No manufacturers match your filters</h3>
+       <p>Try broadening your search or <button class="clear-btn" onclick="clearFilters()">clear filters</button>.</p>
+     </div>`;
+
+}
+
+// ── MODALS ──
+function openModal(id)  { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+document.querySelectorAll('.modal-overlay').forEach(o =>
+  o.addEventListener('click', function(e) { if (e.target===this) this.classList.remove('active'); }));
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => m.classList.remove('active'));
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dropdown-wrap')) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('open'));
+  }
+});
+
+function openChinaModal(mfrName, type) {
+  if (type === 'notFaster') {
+    document.getElementById('china-modal-title').textContent = '🐢 Not Faster Than China';
+    document.getElementById('china-modal-sub').innerHTML =
+      `Reporting for: <strong>${mfrName}</strong><br>Provide the China supplier name, lead time, and shipping time.`;
+    document.getElementById('china-modal-link').href = FORM_LINKS.notFaster + '?entry.mfr=' + encodeURIComponent(mfrName);
+  } else {
+    document.getElementById('china-modal-title').textContent = '💸 Quote Not Competitive';
+    document.getElementById('china-modal-sub').innerHTML =
+      `Reporting for: <strong>${mfrName}</strong><br>Provide the China supplier and their quote for comparison.`;
+    document.getElementById('china-modal-link').href = FORM_LINKS.notCompetitive + '?entry.mfr=' + encodeURIComponent(mfrName);
+  }
+  openModal('china-modal');
+}
+
+// ── REPORT COUNTERS — edit these after reviewing submissions ──
+// Format: "Manufacturer Name": [notFasterCount, notCompetitiveCount]
+const reportCounts = {
+  "Xometry":                [0, 0],
+  "Fictiv":                 [0, 0],
+  "Plethora":               [0, 0],
+  "ProtoLabs":              [0, 0],
+  "Hubs":                   [0, 0],
+  "MachinedParts":          [0, 0],
+  "eMachineShop":           [0, 0],
+  "SendCutSend":            [0, 0],
+  "OSH Cut":                [0, 0],
+  "MetalSpark":             [0, 0],
+  "Kansas City Structural": [0, 0],
+  "Big Blue Saw":           [0, 0],
+  "Accutek":                [0, 0],
+  "Rapid EDM":              [0, 0],
+  "Owens Industries":       [0, 0],
+  "Stratasys Direct":       [0, 0],
+  "Formlabs":               [0, 0],
+  "Fast Radius":            [0, 0],
+  "Midwest Prototyping":    [0, 0],
+  "Shapeways":              [0, 0],
+  "Xcentric Mold":          [0, 0],
+  "FirstMold":              [0, 0],
+  "Laserworx":              [0, 0],
+  "OSH Park":               [0, 0],
+  "Advanced Circuits":      [0, 0],
+  "Sunstone Circuits":      [0, 0],
+  "Casting Dynamics":       [0, 0],
+  "Precision Castparts":    [0, 0],
+  "Casting Concepts":       [0, 0],
+  "Urethane Supply":        [0, 0],
+  "TechniCoil":             [0, 0],
+  "Bend Works":             [0, 0],
+  "Surface Solutions":      [0, 0],
+  "Ano-Coil Corp":          [0, 0],
+};
+
+// Manufacturers pinned to top of specific categories (rendered in order before the shuffled rest)
+const pinnedTop = {};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function getCount(name, idx) {
+  return (reportCounts[name] && reportCounts[name][idx]) || 0;
+}
+
+// ── INIT ──
+buildDropdowns();
+applyFilters();
+</script>
+
+</body>
+</html>
