@@ -278,6 +278,26 @@
   .tag-nda          { background: #0a1a1a; border: 1px solid #0e7490; color: #67e8f9; }
   .tag-dims         { background: #111; border: 1px solid #333; color: #666; font-size: 11px; }
   .mfr-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .add-mfr-btn {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 8px;
+    background: none;
+    border: 1px dashed #444;
+    border-radius: 4px;
+    color: #666;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .add-mfr-btn:hover { border-color: var(--accent); color: var(--accent); }
+
   .add-info-btn {
     background: none;
     border: 1px dashed #555;
@@ -567,16 +587,12 @@ const manufacturers = [
   { name: "Plethora",               url: "https://www.plethora.com",           city: "San Francisco",    state: "CA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '24" x 16" x 8"',  machines: { "CNC Machining": ["3-axis", "4-axis"] }, categories: ["CNC Machining"] },
   { name: "ProtoLabs",              url: "https://www.protolabs.com",          city: "Maple Plain",      state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: '40" x 20" x 12"', machines: { "CNC Machining": ["3-axis", "5-axis"], "Turning": ["CNC Lathe", "Swiss Lathe"], "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "Injection Molding": ["Injection Press"], "Sheet Metal Fabrication": ["Press Brake", "Laser"] }, categories: ["CNC Machining","3D Printing","Injection Molding","Sheet Metal Fabrication","Turning"] },
   { name: "Hubs",                   url: "https://www.hubs.com",               city: "Detroit",          state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis", "5-axis"], "Turning": ["CNC Lathe"], "3D Printing": ["FDM", "SLA", "SLS"] }, categories: ["CNC Machining","Sheet Metal Fabrication","3D Printing","Injection Molding","Turning"] },
-  { name: "MachinedParts",          url: "https://www.machinedparts.com",      city: "Houston",          state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis"], "Turning": ["CNC Lathe"] }, categories: ["CNC Machining","Turning"] },
   { name: "eMachineShop",           url: "https://www.emachineshop.com",       city: "Mahwah",           state: "NJ", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "CNC Machining": ["3-axis", "4-axis"], "Laser Cutting": ["CO2 Laser"], "Waterjet Cutting": ["Waterjet"] }, categories: ["CNC Machining","Sheet Metal Fabrication","Laser Cutting","Waterjet Cutting"] },
   { name: "SendCutSend",            url: "https://sendcutsend.com",            city: "Reno",             state: "NV", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '46" x 30"',       machines: { "CNC Machining": ["CNC Router"], "Laser Cutting": ["Fiber Laser", "CO2 Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake", "Roller"] }, categories: ["CNC Machining","Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
   { name: "OSH Cut",                url: "https://www.oshcut.com",             city: "Columbus",         state: "OH", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '60" x 120"',      machines: { "Laser Cutting": ["Fiber Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake"] }, categories: ["Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
   { name: "MetalSpark",             url: "https://metalspark.com",             city: "Los Angeles",      state: "CA", quote: "instant",       uber: true,  nda: false, minDims: null,           maxDims: null,             machines: { "Sheet Metal Fabrication": ["Press Brake", "Roller"], "Laser Cutting": ["Fiber Laser"] }, categories: ["Sheet Metal Fabrication","Laser Cutting"] },
-  { name: "Kansas City Structural", url: "https://www.kcstructural.com",       city: "Kansas City",      state: "MO", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Welding & Assembly": ["MIG", "TIG", "Stick"], "Sheet Metal Fabrication": ["Press Brake", "Shear"] }, categories: ["Welding & Assembly","Sheet Metal Fabrication","Raw Materials"] },
   { name: "Big Blue Saw",           url: "https://www.bigbluesaw.com",         city: "Peachtree City",   state: "GA", quote: "instant",       uber: false, nda: false, minDims: '0.5" x 0.5"', maxDims: '60" x 120"',      machines: { "Waterjet Cutting": ["Waterjet"], "Laser Cutting": ["CO2 Laser"] }, categories: ["Waterjet Cutting","Laser Cutting"] },
-  { name: "Accutek",                url: "https://www.accutekwaterjet.com",    city: "San Diego",        state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: '60" x 120"',      machines: { "Waterjet Cutting": ["Waterjet", "Abrasive Waterjet"] }, categories: ["Waterjet Cutting"] },
   { name: "Rapid EDM",              url: "https://www.rapidedm.com",           city: "Chatsworth",       state: "CA", quote: "online-manual", uber: true,  nda: true,  minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "Wire EDM": ["Wire EDM", "Sinker EDM"], "CNC Machining": ["3-axis", "4-axis"] }, categories: ["Wire EDM","CNC Machining"] },
-  { name: "Owens Industries",       url: "https://www.owensindustries.com",    city: "New Berlin",       state: "WI", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Wire EDM": ["Wire EDM", "Sinker EDM", "Hole Drilling EDM"], "CNC Machining": ["3-axis", "5-axis"] }, categories: ["Wire EDM","CNC Machining"] },
   { name: "Stratasys Direct",       url: "https://www.stratasysdirect.com",    city: "Eden Prairie",     state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS", "PolyJet"] }, categories: ["3D Printing"] },
   { name: "Formlabs",               url: "https://formlabs.com",               city: "Somerville",       state: "MA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '14" x 9" x 14"',  machines: { "3D Printing": ["SLA", "SLS", "FDM"] }, categories: ["3D Printing"] },
   { name: "Fast Radius",            url: "https://www.fastradius.com",         city: "Chicago",          state: "IL", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "CNC Machining": ["3-axis", "5-axis"], "Injection Molding": ["Injection Press"] }, categories: ["3D Printing","CNC Machining","Injection Molding"] },
@@ -584,18 +600,9 @@ const manufacturers = [
   { name: "Shapeways",              url: "https://www.shapeways.com",          city: "New York",         state: "NY", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["SLS", "SLA", "FDM", "MJF"] }, categories: ["3D Printing"] },
   { name: "Xcentric Mold",          url: "https://www.xcentricmold.com",       city: "Clinton Township", state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press", "Insert Molding"] }, categories: ["Injection Molding"] },
   { name: "FirstMold",              url: "https://firstmold.com",              city: "Dallas",           state: "TX", quote: "online-manual", uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press"], "CNC Machining": ["3-axis", "5-axis"] }, categories: ["Injection Molding","CNC Machining"] },
-  { name: "Laserworx",              url: "https://www.laserworx.com",          city: "Austin",           state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Laser Cutting": ["CO2 Laser", "Fiber Laser"] }, categories: ["Laser Cutting"] },
   { name: "OSH Park",               url: "https://oshpark.com",                city: "Portland",         state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"] }, categories: ["PCB Fabrication"] },
   { name: "Advanced Circuits",      url: "https://www.4pcb.com",               city: "Aurora",           state: "CO", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling", "Drill Press"], "PCBA": ["Pick & Place", "Reflow Oven"] }, categories: ["PCB Fabrication","PCBA"] },
   { name: "Sunstone Circuits",      url: "https://www.sunstone.com",           city: "Mulino",           state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"], "PCBA": ["Pick & Place", "Reflow Oven", "Wave Solder"] }, categories: ["PCB Fabrication","PCBA"] },
-  { name: "Casting Dynamics",       url: "https://www.castingdynamics.com",    city: "Twinsburg",        state: "OH", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Casting & Forging": ["Die Cast", "Sand Cast"] }, categories: ["Casting & Forging"] },
-  { name: "Precision Castparts",    url: "https://www.precast.com",            city: "Portland",         state: "OR", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Casting & Forging": ["Investment Cast", "Die Cast"] }, categories: ["Casting & Forging"] },
-  { name: "TechniCoil",             url: "https://www.technicoil.com",         city: "Elk Grove Village",state: "IL", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Tube & Pipe Bending": ["CNC Tube Bender", "Mandrel Bender"], "Sheet Metal Fabrication": ["Press Brake"] }, categories: ["Tube & Pipe Bending","Sheet Metal Fabrication"] },
-  { name: "Bend Works",             url: "https://www.bendworks.com",          city: "Gardena",          state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Tube & Pipe Bending": ["CNC Tube Bender", "Roll Bender"] }, categories: ["Tube & Pipe Bending"] },
-  { name: "Surface Solutions",      url: "https://surfacesolutionsinc.com",    city: "San Antonio",      state: "TX", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Surface Finishing": ["Anodizing", "Powder Coat", "Plating"] }, categories: ["Surface Finishing"] },
-  { name: "Ano-Coil Corp",          url: "https://www.anocoil.com",            city: "Windsor",          state: "CT", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Surface Finishing": ["Anodizing", "Hard Coat Anodizing"] }, categories: ["Surface Finishing"] },
-  { name: "Urethane Supply",        url: "https://www.urethanesupplyco.com",   city: "Dayton",           state: "OH", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Urethane Casting": ["Vacuum Cast"] }, categories: ["Urethane Casting"] },
-  { name: "Casting Concepts",       url: "https://www.castingconcepts.com",    city: "Azusa",            state: "CA", quote: "email",         uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Urethane Casting": ["Vacuum Cast", "RTV Mold"] }, categories: ["Urethane Casting"] },
 ];
 
 const allCategories = [
@@ -738,7 +745,17 @@ function applyFilters() {
       if (ndaOnly && !m.nda) return false;
       return true;
     });
-    if (!matching.length) return '';
+    if (!matching.length) {
+      return `
+      <div class="category-section">
+        <div class="category-header">
+          <div class="category-icon">${cat.icon}</div>
+          <span class="category-title">${cat.name}</span>
+        </div>
+        <div class="section-stripe"></div>
+        <a class="add-mfr-btn" href="${FORM_LINKS.submit}" target="_blank">+ Add Manufacturer</a>
+      </div>`;
+    }
     totalVisible += matching.length;
 
     const pins = (pinnedTop[cat.name] || [])
@@ -793,6 +810,7 @@ function applyFilters() {
         </div>
         <div class="section-stripe"></div>
         <div class="mfr-list">${cards}</div>
+        <a class="add-mfr-btn" href="${FORM_LINKS.submit}" target="_blank">+ Add Manufacturer</a>
       </div>`;
   }).join('');
 
