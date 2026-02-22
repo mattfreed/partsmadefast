@@ -79,9 +79,6 @@
   .btn-uber     { background: #1a1a1a; color: #ccc; border: 1.5px solid #444; }
   .btn-uber:hover     { border-color: #c4b5fd; color: #c4b5fd; background: #100a1a; }
   .btn-uber.active    { background: #1a0a2e; color: #c4b5fd; border-color: #6d28d9; }
-  .btn-nda      { background: #1a1a1a; color: #ccc; border: 1.5px solid #444; }
-  .btn-nda:hover      { border-color: #67e8f9; color: #67e8f9; background: #041a1a; }
-  .btn-nda.active     { background: #0a1a1a; color: #67e8f9; border-color: #0e7490; }
 
   /* TOOLBAR */
   .toolbar {
@@ -218,11 +215,11 @@
     color: #bbb;
     flex: 1;
   }
-  .mfr-machines strong {
-    color: #999;
+  .cap-label {
+    color: var(--accent);
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     margin-right: 4px;
@@ -264,28 +261,23 @@
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
     letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap;
   }
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 9px; border-radius: 3px; font-size: 12px;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
-    letter-spacing: 0.4px; text-transform: uppercase; white-space: nowrap;
-  }
   .tag-state        { background: #111827; border: 1px solid #374151; color: #9ca3af; }
   .tag-instant      { background: #052e16; border: 1px solid #166534; color: #4ade80; }
   .tag-manual       { background: #172554; border: 1px solid #1e40af; color: #93c5fd; }
   .tag-online-manual{ background: #172554; border: 1px solid #1e40af; color: #93c5fd; }
   .tag-email        { background: #1c1008; border: 1px solid #78350f; color: #fbbf24; }
   .tag-uber         { background: #1a0a2e; border: 1px solid #6d28d9; color: #c4b5fd; }
-  .tag-nda          { background: #0a1a1a; border: 1px solid #0e7490; color: #67e8f9; }
+  .tag-beta         { background: #1a100a; border: 1px solid #92400e; color: #fbbf24; }
   .tag-dims         { background: #111; border: 1px solid #333; color: #666; font-size: 11px; }
   .mfr-actions { display: flex; gap: 6px; flex-shrink: 0; }
   .add-mfr-btn {
     display: inline-flex;
     align-items: center;
     margin-top: 8px;
-    background: none;
-    border: 1px dashed #444;
+    background: #1c1400;
+    border: 1px dashed var(--accent);
     border-radius: 4px;
-    color: #666;
+    color: var(--accent);
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 13px;
     font-weight: 700;
@@ -296,7 +288,7 @@
     text-decoration: none;
     transition: all 0.15s;
   }
-  .add-mfr-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .add-mfr-btn:hover { background: var(--accent); color: #000; border-style: solid; }
 
   .add-info-btn {
     background: none;
@@ -317,20 +309,6 @@
     align-items: center;
   }
   .add-info-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .mfr-dims {
-    margin-left: auto;
-    flex-shrink: 0;
-    font-size: 12px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: #aaa;
-    text-transform: uppercase;
-    white-space: nowrap;
-    align-self: center;
-    line-height: 1.5;
-    text-align: right;
-  }
 
   /* Empty state */
   .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
@@ -371,25 +349,6 @@
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* REPORT COUNTERS */
-  .mfr-report-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-  }
-  .report-counter {
-    font-size: 11px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    color: var(--muted);
-    text-align: center;
-    white-space: nowrap;
-    line-height: 1;
-  }
-
-
 
   @media (max-width: 768px) {
     header { padding: 20px; }
@@ -413,11 +372,12 @@
       <span class="red"></span><span class="white"></span><span class="blue"></span>
     </div>
     <h1>U.S.A. <span>Parts Made Fast</span></h1>
-    <p class="tagline">U.S.-based manufacturers offering quick-turn solutions.<br>Parts delivered to your door <strong>in under 7 days</strong>.</p>
+    <p class="tagline">U.S.-based manufacturers offering quick-turn solutions.<br>Parts delivered to your door <strong>in under 7 days</strong>, assemblies <strong>... a little bit after that</strong>.</p>
+    <p class="tagline" style="margin-top:20px; font-size:13px; font-style:italic;">My hope is that this list helps you find quick-turn partners — and reveals where gaps exist: processes still waiting to be brought to quick-turn, and legacy industries yet to unlock instant quoting.</p>
   </div>
   <div class="header-actions">
     <button class="btn btn-primary" onclick="openModal('submit-modal')">➕ Submit Manufacturer</button>
-    <button class="btn btn-outline" onclick="openModal('feedback-modal')">⚑ Report a Manufacturer</button>
+    <a class="btn btn-outline" id="report-incorrect-btn" href="#" target="_blank">⚑ Report Incorrect Information</a>
   </div>
 </header>
 
@@ -468,22 +428,37 @@
   <!-- Uber carrier toggle -->
   <button class="btn btn-uber" id="uber-btn" onclick="toggleUber()">🚗 Uber Courier Available</button>
 
-  <!-- Next Day Air toggle -->
-  <button class="btn btn-nda" id="nda-btn" onclick="toggleNda()">✈️ Next Day Air</button>
-
   <!-- Clear -->
   <button class="clear-btn" id="clear-btn" onclick="clearFilters()" style="display:none">✕ Clear filters</button>
 
 
 </div>
 
+<!-- BETA DISCLAIMER -->
+<p style="text-align:center; padding: 10px 40px 0; font-size:12px; color:var(--accent);">Manufacturers marked <strong>Beta</strong> may be in closed beta or not yet at full production capacity.</p>
+<p style="text-align:center; padding: 20px 40px 0; font-size:11px; color:var(--muted); letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>
+
 <!-- MAIN -->
 <main id="main-content"></main>
+
+<!-- REQUEST PROCESS -->
+<div style="text-align:center; padding: 16px 40px 60px;">
+  <a id="request-process-link" href="#" target="_blank"
+     style="display:inline-flex; align-items:center; gap:10px;
+            background:var(--accent); color:#000;
+            font-family:'Barlow Condensed',sans-serif; font-size:20px;
+            font-weight:800; letter-spacing:1px; text-transform:uppercase;
+            text-decoration:none; padding:16px 36px; border-radius:4px;
+            transition:background 0.15s;">
+    ➕ Request a Manufacturing Process
+  </a>
+  <p style="margin-top:12px; font-size:13px; color:var(--muted);">Don't see your process? Request it and we'll work to find a quick-turn supplier.</p>
+</div>
 
 <!-- FOOTER -->
 <footer>
   <p>🇺🇸 <strong>U.S.A. Parts Made Fast</strong> — A community-curated directory of quick-turn American manufacturers.</p>
-  <p style="margin-top:6px;">Something missing? <a href="#" onclick="openModal('submit-modal');return false;">Submit a manufacturer</a> · <a href="#" onclick="openModal('feedback-modal');return false;">Report a manufacturer</a></p>
+  <p style="margin-top:6px;">Something missing? <a href="#" onclick="openModal('submit-modal');return false;">Submit a manufacturer</a> · <a id="report-incorrect-footer" href="#" target="_blank">Report incorrect information</a></p>
 </footer>
 
 <!-- SUBMIT MODAL -->
@@ -504,125 +479,151 @@
   </div>
 </div>
 
-<!-- FEEDBACK MODAL -->
-<div class="modal-overlay" id="feedback-modal">
-  <div class="modal">
-    <button class="close-btn" onclick="closeModal('feedback-modal')">✕</button>
-    <h3>Report a Manufacturer</h3>
-    <p>Help keep this list accurate — report a manufacturer that isn't actually fast or competitive.</p>
-    <div class="modal-options">
-      <a class="modal-option-btn" id="not-faster-link" href="#" target="_blank">
-        <span class="opt-icon">🐢</span>
-        <div>
-          <div class="opt-label">Not Faster Than China</div>
-          <div class="opt-sub">Report lead time + shipping comparison vs. a China supplier</div>
-        </div>
-      </a>
-      <a class="modal-option-btn" id="not-competitive-link" href="#" target="_blank">
-        <span class="opt-icon">💸</span>
-        <div>
-          <div class="opt-label">Quote Not Competitive</div>
-          <div class="opt-sub">Report pricing comparison vs. a China supplier</div>
-        </div>
-      </a>
-      <a class="modal-option-btn" id="beyond-7-link" href="#" target="_blank">
-        <span class="opt-icon">📅</span>
-        <div>
-          <div class="opt-label">Quote Well Beyond 7 Days</div>
-          <div class="opt-sub">Report a lead time quoted over 7 days</div>
-        </div>
-      </a>
-      <a class="modal-option-btn" id="incorrect-info-link" href="#" target="_blank">
-        <span class="opt-icon">⚠️</span>
-        <div>
-          <div class="opt-label">Incorrect / Update Information</div>
-          <div class="opt-sub">Report any inaccurate details about a manufacturer</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- PER-CARD CHINA MODAL -->
-<div class="modal-overlay" id="china-modal">
-  <div class="modal">
-    <button class="close-btn" onclick="closeModal('china-modal')">✕</button>
-    <h3 id="china-modal-title">Report</h3>
-    <p id="china-modal-sub"></p>
-    <div class="modal-options">
-      <a class="modal-option-btn" id="china-modal-link" href="#" target="_blank">
-        <span class="opt-icon">📝</span>
-        <div>
-          <div class="opt-label">Open Report Form</div>
-          <div class="opt-sub">Manufacturer name is pre-filled. Add supplier &amp; details.</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</div>
+<a id="incorrect-info-link" href="#" target="_blank" style="display:none"></a>
 
 <script>
 // ── FORM LINKS — replace with your real Google Form URLs ──
 const FORM_LINKS = {
   submit:         "https://docs.google.com/forms/d/e/YOUR_SUBMIT_FORM_ID/viewform",
-  notFaster:      "https://docs.google.com/forms/d/e/YOUR_NOT_FASTER_FORM_ID/viewform",
-  notCompetitive: "https://docs.google.com/forms/d/e/YOUR_NOT_COMPETITIVE_FORM_ID/viewform",
-  beyond7:        "https://docs.google.com/forms/d/e/YOUR_BEYOND_7_FORM_ID/viewform",
   incorrectInfo:  "https://docs.google.com/forms/d/e/YOUR_INCORRECT_INFO_FORM_ID/viewform",
+  requestProcess: "https://docs.google.com/forms/d/e/YOUR_REQUEST_PROCESS_FORM_ID/viewform",
 };
-document.getElementById('submit-link').href          = FORM_LINKS.submit;
-document.getElementById('not-faster-link').href      = FORM_LINKS.notFaster;
-document.getElementById('not-competitive-link').href = FORM_LINKS.notCompetitive;
-document.getElementById('beyond-7-link').href        = FORM_LINKS.beyond7;
-document.getElementById('incorrect-info-link').href  = FORM_LINKS.incorrectInfo;
+document.getElementById('submit-link').href            = FORM_LINKS.submit;
+document.getElementById('incorrect-info-link').href    = FORM_LINKS.incorrectInfo;
+document.getElementById('report-incorrect-btn').href   = FORM_LINKS.incorrectInfo;
+document.getElementById('report-incorrect-footer').href= FORM_LINKS.incorrectInfo;
+document.getElementById('request-process-link').href   = FORM_LINKS.requestProcess;
 
 // ── DATA ──
 // quote: "instant" | "online-manual" | "email"
-// minDims/maxDims: part size strings or null
-// uber: bool, nda: bool
-// machines: { "Category Name": ["Machine A", "Machine B"] }
+// uber: bool, beta: bool
+// dims: { "Category Name": { min: string|null, max: string|null } }
+// machines: { "Category Name": { equip: [...], post: [...] } }
+//   equip = physical machines/equipment, post = secondary processes & finishing
 const manufacturers = [
-  { name: "Xometry",                url: "https://www.xometry.com",            city: "Gaithersburg",     state: "MD", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis", "5-axis"], "Turning": ["CNC Lathe"], "Sheet Metal Fabrication": ["Press Brake", "Laser"], "3D Printing": ["FDM", "SLA", "SLS"], "Injection Molding": ["Injection Press"] }, categories: ["CNC Machining","Sheet Metal Fabrication","3D Printing","Injection Molding","Urethane Casting","Laser Cutting","Turning"] },
-  { name: "Fictiv",                 url: "https://www.fictiv.com",             city: "San Francisco",    state: "CA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "5-axis"], "Turning": ["CNC Lathe"], "3D Printing": ["FDM", "SLA", "DMLS"] }, categories: ["CNC Machining","3D Printing","Injection Molding","Urethane Casting","Turning"] },
-  { name: "Plethora",               url: "https://www.plethora.com",           city: "San Francisco",    state: "CA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '24" x 16" x 8"',  machines: { "CNC Machining": ["3-axis", "4-axis"] }, categories: ["CNC Machining"] },
-  { name: "ProtoLabs",              url: "https://www.protolabs.com",          city: "Maple Plain",      state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: '40" x 20" x 12"', machines: { "CNC Machining": ["3-axis", "5-axis"], "Turning": ["CNC Lathe", "Swiss Lathe"], "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "Injection Molding": ["Injection Press"], "Sheet Metal Fabrication": ["Press Brake", "Laser"] }, categories: ["CNC Machining","3D Printing","Injection Molding","Sheet Metal Fabrication","Turning"] },
-  { name: "Hubs",                   url: "https://www.hubs.com",               city: "Detroit",          state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "CNC Machining": ["3-axis", "4-axis", "5-axis"], "Turning": ["CNC Lathe"], "3D Printing": ["FDM", "SLA", "SLS"] }, categories: ["CNC Machining","Sheet Metal Fabrication","3D Printing","Injection Molding","Turning"] },
-  { name: "eMachineShop",           url: "https://www.emachineshop.com",       city: "Mahwah",           state: "NJ", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "CNC Machining": ["3-axis", "4-axis"], "Laser Cutting": ["CO2 Laser"], "Waterjet Cutting": ["Waterjet"] }, categories: ["CNC Machining","Sheet Metal Fabrication","Laser Cutting","Waterjet Cutting"] },
-  { name: "SendCutSend",            url: "https://sendcutsend.com",            city: "Reno",             state: "NV", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '46" x 30"',       machines: { "CNC Machining": ["CNC Router"], "Laser Cutting": ["Fiber Laser", "CO2 Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake", "Roller"] }, categories: ["CNC Machining","Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
-  { name: "OSH Cut",                url: "https://www.oshcut.com",             city: "Columbus",         state: "OH", quote: "instant",       uber: false, nda: false, minDims: '1" x 1"',      maxDims: '60" x 120"',      machines: { "Laser Cutting": ["Fiber Laser"], "Waterjet Cutting": ["Waterjet"], "Sheet Metal Fabrication": ["Press Brake"] }, categories: ["Laser Cutting","Waterjet Cutting","Sheet Metal Fabrication"] },
-  { name: "MetalSpark",             url: "https://metalspark.com",             city: "Los Angeles",      state: "CA", quote: "instant",       uber: true,  nda: false, minDims: null,           maxDims: null,             machines: { "Sheet Metal Fabrication": ["Press Brake", "Roller"], "Laser Cutting": ["Fiber Laser"] }, categories: ["Sheet Metal Fabrication","Laser Cutting"] },
-  { name: "Big Blue Saw",           url: "https://www.bigbluesaw.com",         city: "Peachtree City",   state: "GA", quote: "instant",       uber: false, nda: false, minDims: '0.5" x 0.5"', maxDims: '60" x 120"',      machines: { "Waterjet Cutting": ["Waterjet"], "Laser Cutting": ["CO2 Laser"] }, categories: ["Waterjet Cutting","Laser Cutting"] },
-  { name: "Rapid EDM",              url: "https://www.rapidedm.com",           city: "Chatsworth",       state: "CA", quote: "online-manual", uber: true,  nda: true,  minDims: null,           maxDims: '18" x 12" x 6"',  machines: { "Wire EDM": ["Wire EDM", "Sinker EDM"], "CNC Machining": ["3-axis", "4-axis"] }, categories: ["Wire EDM","CNC Machining"] },
-  { name: "Stratasys Direct",       url: "https://www.stratasysdirect.com",    city: "Eden Prairie",     state: "MN", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS", "PolyJet"] }, categories: ["3D Printing"] },
-  { name: "Formlabs",               url: "https://formlabs.com",               city: "Somerville",       state: "MA", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: '14" x 9" x 14"',  machines: { "3D Printing": ["SLA", "SLS", "FDM"] }, categories: ["3D Printing"] },
-  { name: "Fast Radius",            url: "https://www.fastradius.com",         city: "Chicago",          state: "IL", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS", "DMLS"], "CNC Machining": ["3-axis", "5-axis"], "Injection Molding": ["Injection Press"] }, categories: ["3D Printing","CNC Machining","Injection Molding"] },
-  { name: "Midwest Prototyping",    url: "https://www.midwestprototyping.com", city: "Blue Mounds",      state: "WI", quote: "online-manual", uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["FDM", "SLA", "SLS"], "CNC Machining": ["3-axis"] }, categories: ["3D Printing","CNC Machining"] },
-  { name: "Shapeways",              url: "https://www.shapeways.com",          city: "New York",         state: "NY", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "3D Printing": ["SLS", "SLA", "FDM", "MJF"] }, categories: ["3D Printing"] },
-  { name: "Xcentric Mold",          url: "https://www.xcentricmold.com",       city: "Clinton Township", state: "MI", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press", "Insert Molding"] }, categories: ["Injection Molding"] },
-  { name: "FirstMold",              url: "https://firstmold.com",              city: "Dallas",           state: "TX", quote: "online-manual", uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "Injection Molding": ["Injection Press"], "CNC Machining": ["3-axis", "5-axis"] }, categories: ["Injection Molding","CNC Machining"] },
-  { name: "OSH Park",               url: "https://oshpark.com",                city: "Portland",         state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"] }, categories: ["PCB Fabrication"] },
-  { name: "Advanced Circuits",      url: "https://www.4pcb.com",               city: "Aurora",           state: "CO", quote: "instant",       uber: false, nda: true,  minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling", "Drill Press"], "PCBA": ["Pick & Place", "Reflow Oven"] }, categories: ["PCB Fabrication","PCBA"] },
-  { name: "Sunstone Circuits",      url: "https://www.sunstone.com",           city: "Mulino",           state: "OR", quote: "instant",       uber: false, nda: false, minDims: null,           maxDims: null,             machines: { "PCB Fabrication": ["PCB Milling"], "PCBA": ["Pick & Place", "Reflow Oven", "Wave Solder"] }, categories: ["PCB Fabrication","PCBA"] },
+  { name: "SendCutSend",      url: "https://sendcutsend.com",               city: "Reno",          state: "NV", quote: "instant",       uber: false, beta: false,
+    dims: { "Laser Cutting": { min: '1" x 1"', max: '44" x 30"' }, "Waterjet Cutting": { min: '1" x 1"', max: '44" x 30"' }, "CNC Machining": { min: '1" x 1" x 1"', max: '7" x 7" x 12"' } },
+    machines: {
+      "Laser Cutting":   { equip: ["Fiber Laser", "CO2 Laser", "Press Brake"],    post: ["Bending", "Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Hardware Insertion", "Countersinking", "Dimple Forming", "Deburring"] },
+      "Waterjet Cutting":{ equip: ["Waterjet"],                                    post: [] },
+      "CNC Machining":   { equip: ["3-axis CNC", "5-axis CNC"],                   post: [] },
+      "Tube Cutting":    { equip: ["Tube Laser"],                                  post: [] },
+    },
+    categories: ["Laser Cutting","Waterjet Cutting","CNC Machining","Tube Cutting"] },
+  { name: "Fabworks",         url: "https://www.fabworks.com",              city: "Ventura",       state: "CA", quote: "instant",       uber: false, beta: false,
+    dims: { "Laser Cutting": { min: null, max: '60" x 120"' } },
+    machines: {
+      "Laser Cutting": { equip: ["Fiber Laser", "Press Brake"], post: ["Bending", "Powder Coating", "Tapping", "Hardware Insertion", "Countersinking"] },
+      "Tube Cutting":  { equip: ["5-axis Tube Laser"],          post: [] },
+    },
+    categories: ["Laser Cutting","Tube Cutting"] },
+  { name: "RMFG",             url: "https://www.rmfg.com",                  city: "Fort Worth",    state: "TX", quote: "instant",       uber: false, beta: false,
+    dims: { "Laser Cutting": { min: null, max: '48" x 96"' } },
+    machines: {
+      "Laser Cutting":      { equip: ["Fiber Laser", "Press Brake"], post: ["Bending"] },
+      "Welding & Assembly": { equip: ["MIG Welder", "TIG Welder"],   post: [] },
+    },
+    categories: ["Laser Cutting","Welding & Assembly"] },
+  { name: "OSH Cut",          url: "https://www.oshcut.com",                city: "Columbus",      state: "OH", quote: "instant",       uber: false, beta: false,
+    dims: { "Laser Cutting": { min: '1" x 1"', max: '60" x 120"' }, "Tube Cutting": { min: null, max: '10" diameter' }, "Tube & Pipe Bending": { min: '0.75" OD', max: '1.5" OD' } },
+    machines: {
+      "Laser Cutting":        { equip: ["Fiber Laser", "Press Brake"],  post: ["Bending", "Powder Coating", "Bead Blasting", "Tumbling", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "Tube Cutting":         { equip: ["Tube Laser"],                   post: [] },
+      "Tube & Pipe Bending":  { equip: ["CNC Tube Bender"],              post: ["Tube Bending"] },
+    },
+    categories: ["Laser Cutting","Tube Cutting","Tube & Pipe Bending"] },
+  { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", quote: "instant",       uber: false, beta: false,
+    dims: { "Casting & Forging": { min: null, max: '~19.7" (500mm)' } },
+    machines: {
+      "Casting & Forging": { equip: ["Investment Casting"], post: ["Polishing", "Sandblasting"] },
+    },
+    categories: ["Casting & Forging"] },
+  { name: "FinalRev",         url: "https://www.finalrev.com",              city: "Berkeley",      state: "CA", quote: "online-manual", uber: false, beta: true,
+    dims: {},
+    machines: {
+      "Laser Cutting":   { equip: ["Fiber Laser"], post: [] },
+      "Waterjet Cutting":{ equip: ["Waterjet"],    post: [] },
+      "CNC Machining":   { equip: ["3-axis CNC", "5-axis CNC"],  post: [] },
+      "Turning":         { equip: ["Millturn"],                 post: [] },
+    },
+    categories: ["Laser Cutting","Waterjet Cutting","CNC Machining","Turning"] },
+  { name: "Foundation",       url: "https://www.foundation-industries.com", city: null,            state: null, quote: "online-manual", uber: false, beta: true,
+    dims: {},
+    machines: {
+      "CNC Machining": { equip: ["3-axis CNC", "5-axis CNC"], post: [] },
+    },
+    categories: ["CNC Machining"] },
+  { name: "Loombotic",        url: "https://loombotic.com",                 city: "Toronto",       state: "ON", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Cable Harnessing": { equip: ["Automated Assembly"], post: ["Wire Harness Assembly"] },
+    },
+    categories: ["Cable Harnessing"] },
+  { name: "Nox Metals",       url: "https://www.noxmetals.co",              city: "Detroit",       state: "MI", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Raw Materials": { equip: ["Big Ass Saw", "Smaller Saws"], post: [] },
+    },
+    categories: ["Raw Materials"] },
+  { name: "Nebula",           url: "https://buildnebula.com",               city: "El Segundo",    state: "CA", quote: "instant",       uber: false, beta: true,
+    dims: {},
+    machines: {
+      "PCBA": { equip: [], post: ["SMT Assembly"] },
+    },
+    categories: ["PCBA"] },
+  { name: "Blitz Panel",      url: "https://blitzpanel.com",                city: "Austin",        state: "TX", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Control Panel Fabrication": { equip: [], post: ["UL 508A", "DIN-rail Assembly"] },
+    },
+    categories: ["Control Panel Fabrication"] },
+  { name: "Senra Systems",    url: "https://www.senrasystems.us",           city: "Redondo Beach", state: "CA", quote: "online-manual", uber: false, beta: true,
+    dims: {},
+    machines: {
+      "Cable Harnessing": { equip: ["Automated Assembly"], post: ["Aerospace Wire Harness", "Formboard Assembly"] },
+    },
+    categories: ["Cable Harnessing"] },
+  { name: "Podium Automation",url: "https://www.podiumautomation.com",      city: "Brooklyn",      state: "NY", quote: "online-manual", uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Control Panel Fabrication": { equip: [], post: ["UL 508A", "UL 698A"] },
+    },
+    categories: ["Control Panel Fabrication"] },
+  { name: "Ponoko",           url: "https://www.ponoko.com",                city: "Oakland",       state: "CA", quote: "instant",       uber: false, beta: false,
+    dims: { "Laser Cutting": { min: null, max: '~31" x 15"' } },
+    machines: {
+      "Laser Cutting": { equip: ["CO2 Laser", "Fiber Laser", "Press Brake"], post: ["Bending", "Powder Coating", "UV Printing", "Tapping"] },
+    },
+    categories: ["Laser Cutting"] },
+  { name: "JawsTec",          url: "https://www.jawstec.com",               city: "American Falls",state: "ID", quote: "instant",       uber: false, beta: false,
+    dims: { "3D Printing": { min: null, max: 'MJF: 15"×11"×15" · SLS: 15"×27.6"×22.8"' } },
+    machines: {
+      "3D Printing": { equip: ["MJF", "SLS", "SLA", "FDM"], post: [] },
+    },
+    categories: ["3D Printing"] },
 ];
 
 const allCategories = [
-  { name: "CNC Machining",          icon: "⚙️" },
-  { name: "Turning",                icon: "🔁" },
-  { name: "Wire EDM",               icon: "⚡" },
-  { name: "Casting & Forging",      icon: "🔥" },
-  { name: "Sheet Metal Fabrication",icon: "🔩" },
-  { name: "Waterjet Cutting",       icon: "💧" },
-  { name: "Laser Cutting",          icon: "🔦" },
-  { name: "3D Printing",            icon: "🖨️" },
-  { name: "Injection Molding",      icon: "🧪" },
-  { name: "Urethane Casting",       icon: "🧫" },
-  { name: "Extrusion",              icon: "📏" },
-  { name: "Tube & Pipe Bending",    icon: "🔄" },
-  { name: "Welding & Assembly",     icon: "🔧" },
-  { name: "Surface Finishing",      icon: "✨" },
-  { name: "PCB Fabrication",        icon: "🔌" },
-  { name: "PCBA",                   icon: "🖥️" },
-  { name: "Raw Materials",           icon: "🏗️" },
+  { name: "CNC Machining",            icon: "⚙️" },
+  { name: "Turning",                  icon: "🔁" },
+  { name: "Wire EDM",                 icon: "⚡" },
+  { name: "Casting & Forging",        icon: "🔥" },
+  { name: "Metal Stamping",           icon: "🔨" },
+  { name: "Ceramics & Glass",         icon: "🏺" },
+  { name: "Waterjet Cutting",         icon: "💧" },
+  { name: "Laser Cutting",            icon: "🔦" },
+  { name: "Tube Cutting",             icon: "✂️" },
+  { name: "Tube & Pipe Bending",      icon: "🔄" },
+  { name: "3D Printing",              icon: "🖨️" },
+  { name: "Injection Molding",        icon: "🧪" },
+  { name: "Urethane Casting",         icon: "🧫" },
+  { name: "Extrusion",                icon: "📏" },
+  { name: "Welding & Assembly",       icon: "🔧" },
+  { name: "PCB Fabrication",          icon: "🔌" },
+  { name: "PCBA",                     icon: "🖥️" },
+  { name: "Control Panel Fabrication",icon: "🔲" },
+  { name: "Cable Harnessing",         icon: "🪢" },
+  { name: "Raw Materials",            icon: "🏗️" },
 ];
 
 // ── FILTER STATE ──
@@ -630,7 +631,6 @@ let selectedProcess = null;
 let selectedState   = null;
 let instantOnly     = false;
 let uberOnly        = false;
-let ndaOnly         = false;
 
 // ── BUILD DROPDOWNS ──
 function buildDropdowns() {
@@ -703,20 +703,13 @@ function toggleUber() {
   applyFilters();
 }
 
-function toggleNda() {
-  ndaOnly = !ndaOnly;
-  document.getElementById('nda-btn').classList.toggle('active', ndaOnly);
-  applyFilters();
-}
-
 function clearFilters() {
-  selectedProcess = null; selectedState = null; instantOnly = false; uberOnly = false; ndaOnly = false;
+  selectedProcess = null; selectedState = null; instantOnly = false; uberOnly = false;
   document.getElementById('search-input').value = '';
   document.getElementById('process-label').textContent = 'All Processes';
   document.getElementById('state-label').textContent   = 'All States';
   document.getElementById('instant-btn').classList.remove('active');
   document.getElementById('uber-btn').classList.remove('active');
-  document.getElementById('nda-btn').classList.remove('active');
   document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
   document.querySelectorAll('#state-list .dropdown-item').forEach(el  => el.classList.toggle('selected', el.dataset.value === ''));
   applyFilters();
@@ -725,12 +718,30 @@ function clearFilters() {
 // ── RENDER ──
 function applyFilters() {
   const query = document.getElementById('search-input').value.toLowerCase().trim();
-  const isFiltered = selectedProcess || selectedState || instantOnly || uberOnly || ndaOnly || query;
+  const isFiltered = selectedProcess || selectedState || instantOnly || uberOnly || query;
   document.getElementById('clear-btn').style.display = isFiltered ? '' : 'none';
 
-  const catsToShow = shuffle(selectedProcess
+  const catsShuffled = shuffle(selectedProcess
     ? allCategories.filter(c => c.name === selectedProcess)
     : [...allCategories]);
+
+  // Always show populated categories before empty ones
+  const catsToShow = [
+    ...catsShuffled.filter(cat => manufacturers.some(m => {
+      if (!m.categories.includes(cat.name)) return false;
+      if (selectedState && m.state !== selectedState) return false;
+      if (instantOnly && m.quote !== 'instant') return false;
+      if (uberOnly && !m.uber) return false;
+      return true;
+    })),
+    ...catsShuffled.filter(cat => !manufacturers.some(m => {
+      if (!m.categories.includes(cat.name)) return false;
+      if (selectedState && m.state !== selectedState) return false;
+      if (instantOnly && m.quote !== 'instant') return false;
+      if (uberOnly && !m.uber) return false;
+      return true;
+    })),
+  ];
 
   let totalVisible = 0;
   const html = catsToShow.map(cat => {
@@ -742,7 +753,6 @@ function applyFilters() {
       if (selectedState && m.state !== selectedState) return false;
       if (instantOnly && m.quote !== 'instant') return false;
       if (uberOnly && !m.uber) return false;
-      if (ndaOnly && !m.nda) return false;
       return true;
     });
     if (!matching.length) {
@@ -765,37 +775,44 @@ function applyFilters() {
     const ordered = [...pins, ...rest];
 
     const cards = ordered.map((m, i) => {
-      const nfCount = getCount(m.name, 0);
-      const ncCount = getCount(m.name, 1);
-
-      const machineList = (m.machines && m.machines[cat.name]) ? m.machines[cat.name].join(', ') : null;
+      const catCaps = m.machines && m.machines[cat.name];
+      const equipList = catCaps && catCaps.equip && catCaps.equip.length ? catCaps.equip.join(', ') : null;
+      const postList  = catCaps && catCaps.post  && catCaps.post.length  ? catCaps.post.join(', ')  : null;
       const addInfoUrl = `${FORM_LINKS.incorrectInfo}?entry.mfr=${encodeURIComponent(m.name)}`;
       const addBtn = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Info</a>`;
 
-      const machinesHtml = `<div class="mfr-machines"><strong>Machines:</strong>${machineList ? machineList : addBtn}</div>`;
+      const addEquipBtn = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Machine</a>`;
+      const addPostBtn  = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Post Process</a>`;
+      const machinesHtml = `<div style="display:flex;flex-direction:column;gap:4px;">
+        <div class="mfr-machines"><span class="cap-label">Machines:</span> ${equipList ? equipList + ' ' : ''}${addEquipBtn}</div>
+        <div class="mfr-machines"><span class="cap-label">Post Processes:</span> ${postList ? postList + ' ' : ''}${addPostBtn}</div>
+      </div>`;
 
+      const catDims = m.dims && m.dims[cat.name];
       const dimsHtml = `<div class="mfr-dims">${
-        m.maxDims ? `Max: ${m.maxDims}` : `Max: ${addBtn}`
+        catDims && catDims.max ? `Max: ${catDims.max}` : `Max: ${addBtn}`
       }<br>${
-        m.minDims ? `Min: ${m.minDims}` : `Min: ${addBtn}`
+        catDims && catDims.min ? `Min: ${catDims.min}` : `Min: ${addBtn}`
       }</div>`;
 
       return `
       <div class="mfr-card" style="animation-delay:${i*0.03}s">
         <div class="mfr-card-top">
-          <a class="mfr-name" href="${m.url}" target="_blank" rel="noopener">${m.name} ↗</a>
+          <div style="display:flex;align-items:center;gap:8px;">
+            ${m.beta ? '<span class="tag tag-beta">Beta</span>' : ''}
+            <a class="mfr-name" href="${m.url}" target="_blank" rel="noopener">${m.name} ↗</a>
+          </div>
           <div class="mfr-meta">
             ${m.quote==='instant'
               ? '<span class="tag tag-instant">⚡ Instant Quote</span>'
               : m.quote==='online-manual'
-              ? '<span class="tag tag-online-manual">🖥️ Online Manual Quote</span>'
+              ? '<span class="tag tag-online-manual">🖥️ Online Platform Manual Quote</span>'
               : '<span class="tag tag-email">✉️ Email Quote</span>'}
             ${m.uber ? '<span class="tag tag-uber">🚗 Uber Courier</span>' : ''}
-            ${m.nda  ? '<span class="tag tag-nda">✈️ Next Day Air</span>'  : ''}
           </div>
         </div>
         <div class="mfr-card-bottom">
-          <div class="mfr-location">📍 ${m.city}, ${m.state}</div>
+          ${(m.city || m.state) ? `<div class="mfr-location">📍 ${[m.city, m.state].filter(Boolean).join(', ')}</div>` : ''}
           ${machinesHtml}
           ${dimsHtml}
         </div>
@@ -839,60 +856,6 @@ document.addEventListener('click', e => {
   }
 });
 
-function openChinaModal(mfrName, type) {
-  if (type === 'notFaster') {
-    document.getElementById('china-modal-title').textContent = '🐢 Not Faster Than China';
-    document.getElementById('china-modal-sub').innerHTML =
-      `Reporting for: <strong>${mfrName}</strong><br>Provide the China supplier name, lead time, and shipping time.`;
-    document.getElementById('china-modal-link').href = FORM_LINKS.notFaster + '?entry.mfr=' + encodeURIComponent(mfrName);
-  } else {
-    document.getElementById('china-modal-title').textContent = '💸 Quote Not Competitive';
-    document.getElementById('china-modal-sub').innerHTML =
-      `Reporting for: <strong>${mfrName}</strong><br>Provide the China supplier and their quote for comparison.`;
-    document.getElementById('china-modal-link').href = FORM_LINKS.notCompetitive + '?entry.mfr=' + encodeURIComponent(mfrName);
-  }
-  openModal('china-modal');
-}
-
-// ── REPORT COUNTERS — edit these after reviewing submissions ──
-// Format: "Manufacturer Name": [notFasterCount, notCompetitiveCount]
-const reportCounts = {
-  "Xometry":                [0, 0],
-  "Fictiv":                 [0, 0],
-  "Plethora":               [0, 0],
-  "ProtoLabs":              [0, 0],
-  "Hubs":                   [0, 0],
-  "MachinedParts":          [0, 0],
-  "eMachineShop":           [0, 0],
-  "SendCutSend":            [0, 0],
-  "OSH Cut":                [0, 0],
-  "MetalSpark":             [0, 0],
-  "Kansas City Structural": [0, 0],
-  "Big Blue Saw":           [0, 0],
-  "Accutek":                [0, 0],
-  "Rapid EDM":              [0, 0],
-  "Owens Industries":       [0, 0],
-  "Stratasys Direct":       [0, 0],
-  "Formlabs":               [0, 0],
-  "Fast Radius":            [0, 0],
-  "Midwest Prototyping":    [0, 0],
-  "Shapeways":              [0, 0],
-  "Xcentric Mold":          [0, 0],
-  "FirstMold":              [0, 0],
-  "Laserworx":              [0, 0],
-  "OSH Park":               [0, 0],
-  "Advanced Circuits":      [0, 0],
-  "Sunstone Circuits":      [0, 0],
-  "Casting Dynamics":       [0, 0],
-  "Precision Castparts":    [0, 0],
-  "Casting Concepts":       [0, 0],
-  "Urethane Supply":        [0, 0],
-  "TechniCoil":             [0, 0],
-  "Bend Works":             [0, 0],
-  "Surface Solutions":      [0, 0],
-  "Ano-Coil Corp":          [0, 0],
-};
-
 // Manufacturers pinned to top of specific categories (rendered in order before the shuffled rest)
 const pinnedTop = {};
 
@@ -903,10 +866,6 @@ function shuffle(arr) {
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
-}
-
-function getCount(name, idx) {
-  return (reportCounts[name] && reportCounts[name][idx]) || 0;
 }
 
 // ── INIT ──
