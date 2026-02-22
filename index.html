@@ -201,7 +201,7 @@
     transition: all 0.15s;
     animation: fadeIn 0.2s ease both;
   }
-  .mfr-card:hover { background: var(--surface2); border-left-color: var(--accent); }
+  .mfr-card:hover { background: var(--surface2); border-left-color: var(--accent); cursor: pointer; }
   .mfr-card-top {
     display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
   }
@@ -353,14 +353,75 @@
   @media (max-width: 768px) {
     header { padding: 20px; }
     h1 { font-size: 32px; }
+    .tagline { font-size: 13px; }
+    .header-actions { gap: 8px; }
+    .header-actions .btn { font-size: 13px; padding: 7px 12px; }
+
     .toolbar { padding: 10px 16px; gap: 8px; }
+    /* Search takes its own full row */
+    .search-wrap { max-width: 100%; min-width: 100%; order: -1; flex-basis: 100%; }
+    /* Dropdowns share a row and stretch equally */
+    .dropdown-wrap { flex: 1; }
+    .dropdown-trigger { min-width: 0; width: 100%; }
+    .result-bar { order: 99; width: 100%; margin-left: 0; font-size: 12px; }
+
     main { padding: 24px 16px 60px; }
-    .search-wrap { max-width: 100%; min-width: 100%; }
-    .dropdown-trigger { min-width: 140px; }
+    .category-title { font-size: 22px; }
+
     .mfr-card { flex-direction: column; align-items: flex-start; }
     .mfr-actions { margin-left: 0; flex-wrap: wrap; }
-    .result-bar { order: -1; width: 100%; margin-left: 0; }
+    /* Card bottom stacks vertically on mobile */
+    .mfr-card-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .mfr-dims { margin-left: 0; text-align: left; white-space: normal; }
+
+    footer { padding: 20px 16px; }
+    .modal { padding: 24px 16px; }
+    .modal-overlay { padding: 12px; }
   }
+
+  /* FORMS */
+  .modal-form { display: flex; flex-direction: column; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted);
+  }
+  .form-group label .opt { font-weight: 400; text-transform: none; letter-spacing: 0; }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: var(--surface2); border: 1.5px solid var(--border); border-radius: 4px;
+    color: var(--text); font-family: 'Barlow', sans-serif; font-size: 14px;
+    padding: 9px 12px; outline: none; transition: border-color 0.15s; width: 100%;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--accent); }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: #555; }
+  .form-group textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+  .form-group select { cursor: pointer; -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23888' d='M5 7L0 2h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; }
+  .form-group input.invalid { border-color: var(--accent2); }
+  .form-row { display: flex; gap: 10px; }
+  .form-row .form-group { flex: 1; min-width: 0; }
+  .form-context {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 4px;
+    padding: 7px 12px; font-size: 13px; color: var(--muted);
+  }
+  .form-context strong { color: var(--text); font-weight: 600; }
+  .field-hidden { display: none !important; }
+
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: #1a2e1a; border: 1px solid #166534; color: #4ade80;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700;
+    letter-spacing: 0.5px; padding: 12px 28px; border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 9999;
+    opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
@@ -376,8 +437,8 @@
     <p class="tagline" style="margin-top:20px; font-size:13px; font-style:italic;">My hope is that this list helps you find quick-turn partners — and reveals where gaps exist: processes still waiting to be brought to quick-turn, and legacy industries yet to unlock instant quoting.</p>
   </div>
   <div class="header-actions">
-    <button class="btn btn-primary" onclick="openModal('submit-modal')">➕ Submit Manufacturer</button>
-    <a class="btn btn-outline" id="report-incorrect-btn" href="#" target="_blank">⚑ Report Incorrect Information</a>
+    <button class="btn btn-primary" onclick="openSubmitModal()">➕ Submit Manufacturer</button>
+    <button class="btn btn-outline" onclick="openUpdateModal('','','incorrect')">⚑ Report Incorrect Information</button>
   </div>
 </header>
 
@@ -443,56 +504,181 @@
 
 <!-- REQUEST PROCESS -->
 <div style="text-align:center; padding: 16px 40px 60px;">
-  <a id="request-process-link" href="#" target="_blank"
+  <button onclick="openUpdateModal('','','request')"
      style="display:inline-flex; align-items:center; gap:10px;
             background:var(--accent); color:#000;
             font-family:'Barlow Condensed',sans-serif; font-size:20px;
             font-weight:800; letter-spacing:1px; text-transform:uppercase;
-            text-decoration:none; padding:16px 36px; border-radius:4px;
-            transition:background 0.15s;">
+            border:none; padding:16px 36px; border-radius:4px;
+            cursor:pointer; transition:background 0.15s;">
     ➕ Request a Manufacturing Process
-  </a>
+  </button>
   <p style="margin-top:12px; font-size:13px; color:var(--muted);">Don't see your process? Request it and we'll work to find a quick-turn supplier.</p>
 </div>
 
 <!-- FOOTER -->
 <footer>
   <p>🇺🇸 <strong>U.S.A. Parts Made Fast</strong> — A community-curated directory of quick-turn American manufacturers.</p>
-  <p style="margin-top:6px;">Something missing? <a href="#" onclick="openModal('submit-modal');return false;">Submit a manufacturer</a> · <a id="report-incorrect-footer" href="#" target="_blank">Report incorrect information</a></p>
+  <p style="margin-top:6px;">Something missing? <a href="#" onclick="openSubmitModal();return false;">Submit a manufacturer</a> · <a href="#" onclick="openUpdateModal('','','incorrect');return false;">Report incorrect information</a></p>
 </footer>
 
-<!-- SUBMIT MODAL -->
+<!-- SUBMIT MANUFACTURER MODAL -->
 <div class="modal-overlay" id="submit-modal">
-  <div class="modal">
+  <div class="modal" style="max-width:540px">
     <button class="close-btn" onclick="closeModal('submit-modal')">✕</button>
-    <h3>Submit a Manufacturer</h3>
-    <p>Know a U.S. shop that delivers parts in under 7 days? Submit it and we'll review it for the directory.</p>
-    <div class="modal-options">
-      <a class="modal-option-btn" id="submit-link" href="#" target="_blank">
-        <span class="opt-icon">🏭</span>
-        <div>
-          <div class="opt-label">Submit New Manufacturer</div>
-          <div class="opt-sub">Shop name, URL, state, capabilities &amp; quote type</div>
+    <h3>🏭 Submit a Manufacturer</h3>
+    <p>Know a U.S. shop that delivers parts fast? Add it to the directory.</p>
+    <div class="modal-form" id="submit-form">
+      <div class="form-group">
+        <label>Company Name *</label>
+        <input type="text" id="sm-name" placeholder="Acme Manufacturing Co.">
+      </div>
+      <div class="form-group">
+        <label>Website URL *</label>
+        <input type="url" id="sm-url" placeholder="https://acmemfg.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" id="sm-city" placeholder="Austin">
         </div>
-      </a>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" id="sm-state" placeholder="TX" maxlength="2" style="text-transform:uppercase">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Quote Type</label>
+        <select id="sm-quote">
+          <option value="">Select…</option>
+          <option value="instant">⚡ Instant Quote</option>
+          <option value="online-manual">🖥️ Online Platform Manual Quote</option>
+          <option value="email">✉️ Email/Form Submission Quote</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Categories / Capabilities</label>
+        <input type="text" id="sm-categories" placeholder="e.g. Laser Cutting, CNC Machining, 3D Printing">
+      </div>
+      <div class="form-group">
+        <label>Notes <span class="opt">(optional)</span></label>
+        <textarea id="sm-notes" placeholder="Anything else we should know…"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Your Email <span class="opt">(optional — for follow-up)</span></label>
+        <input type="email" id="sm-email" placeholder="you@example.com">
+      </div>
+      <button class="btn btn-primary" id="sm-submit-btn" onclick="submitMfrForm()" style="width:100%;margin-top:4px">Submit Manufacturer</button>
+    </div>
+    <div class="form-success" id="submit-success">
+      <span class="s-icon">✓</span>Response submitted.
     </div>
   </div>
 </div>
 
-<a id="incorrect-info-link" href="#" target="_blank" style="display:none"></a>
+<!-- UPDATE INFO MODAL -->
+<div class="modal-overlay" id="update-modal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('update-modal')">✕</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span id="um-icon" style="font-size:22px"></span>
+      <h3 id="um-title" style="margin:0"></h3>
+    </div>
+    <div class="form-context field-hidden" id="um-context" style="margin-bottom:14px"></div>
+    <div class="modal-form" id="update-form">
+      <!-- Editable mfr name — shown only when report triggered without context -->
+      <div class="form-group field-hidden" id="um-field-mfr">
+        <label>Manufacturer</label>
+        <input type="text" id="um-mfr-editable" placeholder="e.g. SendCutSend">
+      </div>
+      <div class="form-group field-hidden" id="um-field-machine">
+        <label>Machine / Equipment</label>
+        <input type="text" id="um-machine" placeholder="e.g. 5-axis CNC Mill">
+      </div>
+      <div class="form-group field-hidden" id="um-field-post">
+        <label>Post Process</label>
+        <input type="text" id="um-post" placeholder="e.g. Anodizing">
+      </div>
+      <div class="form-group field-hidden" id="um-field-max">
+        <label>Max Part Size</label>
+        <input type="text" id="um-max" placeholder='e.g. 12" x 24" x 6"'>
+      </div>
+      <div class="form-group field-hidden" id="um-field-min">
+        <label>Min Part Size</label>
+        <input type="text" id="um-min" placeholder='e.g. 0.5" x 0.5"'>
+      </div>
+      <div class="form-group field-hidden" id="um-field-process">
+        <label>Manufacturing Process</label>
+        <input type="text" id="um-process" placeholder="e.g. Electroforming">
+      </div>
+      <div class="form-group field-hidden" id="um-field-notes">
+        <label>What's incorrect?</label>
+        <textarea id="um-notes" placeholder="Describe what needs to be corrected…"></textarea>
+      </div>
+      <div class="form-group" id="um-field-extra">
+        <label>Notes <span class="opt">(optional)</span></label>
+        <textarea id="um-extra" placeholder="Any additional context…" style="min-height:54px"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Your Email <span class="opt">(optional)</span></label>
+        <input type="email" id="um-email" placeholder="you@example.com">
+      </div>
+      <button class="btn btn-primary" id="um-submit-btn" onclick="submitUpdateForm()" style="width:100%;margin-top:4px">Submit</button>
+    </div>
+    <div class="form-success" id="update-success">
+      <span class="s-icon">✓</span>Response submitted.
+    </div>
+    <input type="hidden" id="um-mfr-name">
+    <input type="hidden" id="um-category">
+    <input type="hidden" id="um-type">
+    <input type="hidden" id="um-machine-name">
+  </div>
+</div>
 
 <script>
-// ── FORM LINKS — replace with your real Google Form URLs ──
-const FORM_LINKS = {
-  submit:         "https://docs.google.com/forms/d/e/YOUR_SUBMIT_FORM_ID/viewform",
-  incorrectInfo:  "https://docs.google.com/forms/d/e/YOUR_INCORRECT_INFO_FORM_ID/viewform",
-  requestProcess: "https://docs.google.com/forms/d/e/YOUR_REQUEST_PROCESS_FORM_ID/viewform",
+// ── FORM ENDPOINTS ──
+// Once Google Forms are created, replace PLACEHOLDER values with real form IDs and entry field IDs.
+const FORMS = {
+  updateInfo: {
+    endpoint: 'https://docs.google.com/forms/d/e/1FAIpQLSepzwAHYM0-pl6akH9SkHr3Ftpr88ag_jwwJX2i3v_AMHN5yg/formResponse',
+    fields: {
+      mfrName:    'entry.2018899847',
+      category:   'entry.1350813213',
+      updateType: 'entry.823762915',
+      machine:    'entry.1051368037',
+      postProcess:'entry.1459081534',
+      minSize:    'entry.1195394525',
+      maxSize:    'entry.1871885677',
+      notes:      'entry.1167365685',
+      email:      'entry.941799479',
+    }
+  },
+  submitMfr: {
+    endpoint: 'https://docs.google.com/forms/d/e/1FAIpQLSfBrpMJ2QrUFIgQk-LbyG9KMJgnbnIFWBawDIvvNi3GduM8fQ/formResponse',
+    fields: {
+      companyName: 'entry.596498910',
+      url:         'entry.295182703',
+      city:        'entry.1033418585',
+      state:       'entry.1594157139',
+      quoteType:   'entry.1025588795',
+      categories:  'entry.1589974558',
+      notes:       'entry.518912417',
+      email:       'entry.1039474365',
+    }
+  }
 };
-document.getElementById('submit-link').href            = FORM_LINKS.submit;
-document.getElementById('incorrect-info-link').href    = FORM_LINKS.incorrectInfo;
-document.getElementById('report-incorrect-btn').href   = FORM_LINKS.incorrectInfo;
-document.getElementById('report-incorrect-footer').href= FORM_LINKS.incorrectInfo;
-document.getElementById('request-process-link').href   = FORM_LINKS.requestProcess;
+
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+async function postToGoogleForms(endpoint, data) {
+  const body = new URLSearchParams();
+  Object.entries(data).forEach(([k, v]) => { if (v) body.append(k, v); });
+  try { await fetch(endpoint, { method: 'POST', mode: 'no-cors', body }); } catch(e) {}
+}
 
 // ── DATA ──
 // quote: "instant" | "online-manual" | "email"
@@ -502,65 +688,84 @@ document.getElementById('request-process-link').href   = FORM_LINKS.requestProce
 //   equip = physical machines/equipment, post = secondary processes & finishing
 const manufacturers = [
   { name: "SendCutSend",      url: "https://sendcutsend.com",               city: "Reno",          state: "NV", quote: "instant",       uber: false, beta: false,
-    dims: { "Laser Cutting": { min: '1" x 1"', max: '44" x 30"' }, "Waterjet Cutting": { min: '1" x 1"', max: '44" x 30"' }, "CNC Machining": { min: '1" x 1" x 1"', max: '7" x 7" x 12"' } },
-    machines: {
-      "Laser Cutting":   { equip: ["Fiber Laser", "CO2 Laser", "Press Brake"],    post: ["Bending", "Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Hardware Insertion", "Countersinking", "Dimple Forming", "Deburring"] },
-      "Waterjet Cutting":{ equip: ["Waterjet"],                                    post: [] },
-      "CNC Machining":   { equip: ["3-axis CNC", "5-axis CNC"],                   post: [] },
-      "Tube Cutting":    { equip: ["Tube Laser"],                                  post: [] },
+    dims: {
+      "Laser Cutting":    { "Fiber Laser": { min: null, max: null }, "CO2 Laser": { min: null, max: null } },
+      "Waterjet Cutting": { "Waterjet":    { min: null, max: null } },
+      "CNC Milling":      { "5-axis CNC":  { min: null, max: null } },
+      "CNC Routing":      { "CNC Router":  { min: null, max: null } },
     },
-    categories: ["Laser Cutting","Waterjet Cutting","CNC Machining","Tube Cutting"] },
+    machines: {
+      "Laser Cutting":   { equip: ["Fiber Laser", "CO2 Laser"],    post: ["Bending", "Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Hardware Insertion", "Countersinking", "Dimple Forming", "Deburring"] },
+      "Waterjet Cutting":{ equip: ["Waterjet"],              post: ["Bending", "Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "CNC Milling":     { equip: ["5-axis CNC"], post: ["Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Deburring"] },
+      "CNC Routing":     { equip: ["CNC Router"], post: ["Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Deburring"] },
+    },
+    categories: ["Laser Cutting","Waterjet Cutting","CNC Milling","CNC Routing"] },
   { name: "Fabworks",         url: "https://www.fabworks.com",              city: "Ventura",       state: "CA", quote: "instant",       uber: false, beta: false,
-    dims: { "Laser Cutting": { min: null, max: '60" x 120"' } },
-    machines: {
-      "Laser Cutting": { equip: ["Fiber Laser", "Press Brake"], post: ["Bending", "Powder Coating", "Tapping", "Hardware Insertion", "Countersinking"] },
-      "Tube Cutting":  { equip: ["5-axis Tube Laser"],          post: [] },
+    betaCategories: ["Welding"],
+    dims: {
+      "Laser Cutting": { "Fiber Laser": { min: null, max: null } },
+      "Tube Cutting":  { "5-axis Tube Laser":  { min: null, max: null } },
+      "Welding":       { "MIG Welder":  { min: null, max: null }, "TIG Welder": { min: null, max: null } },
     },
-    categories: ["Laser Cutting","Tube Cutting"] },
+    machines: {
+      "Laser Cutting":      { equip: ["Fiber Laser"], post: ["Bending", "Powder Coating", "Tapping", "Hardware Insertion", "Countersinking"] },
+      "Tube Cutting":       { equip: ["5-axis Tube Laser"],          post: ["Powder Coating", "Bending", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "Welding": { equip: ["MIG Welder", "TIG Welder"],   post: ["Tapping", "Hardware Insertion", "Countersinking"] },
+    },
+    categories: ["Laser Cutting","Tube Cutting","Welding"] },
   { name: "RMFG",             url: "https://www.rmfg.com",                  city: "Fort Worth",    state: "TX", quote: "instant",       uber: false, beta: false,
-    dims: { "Laser Cutting": { min: null, max: '48" x 96"' } },
-    machines: {
-      "Laser Cutting":      { equip: ["Fiber Laser", "Press Brake"], post: ["Bending"] },
-      "Welding & Assembly": { equip: ["MIG Welder", "TIG Welder"],   post: [] },
+    dims: {
+      "Laser Cutting": { "Fiber Laser":  { min: null, max: null } },
+      "Welding":       { "MIG Welder": { min: null, max: null }, "TIG Welder": { min: null, max: null } },
     },
-    categories: ["Laser Cutting","Welding & Assembly"] },
-  { name: "OSH Cut",          url: "https://www.oshcut.com",                city: "Columbus",      state: "OH", quote: "instant",       uber: false, beta: false,
-    dims: { "Laser Cutting": { min: '1" x 1"', max: '60" x 120"' }, "Tube Cutting": { min: null, max: '10" diameter' }, "Tube & Pipe Bending": { min: '0.75" OD', max: '1.5" OD' } },
     machines: {
-      "Laser Cutting":        { equip: ["Fiber Laser", "Press Brake"],  post: ["Bending", "Powder Coating", "Bead Blasting", "Tumbling", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
-      "Tube Cutting":         { equip: ["Tube Laser"],                   post: [] },
-      "Tube & Pipe Bending":  { equip: ["CNC Tube Bender"],              post: ["Tube Bending"] },
+      "Laser Cutting":      { equip: ["Fiber Laser"], post: ["Bending", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "Welding": { equip: ["MIG Welder", "TIG Welder"],   post: ["Tapping", "Hardware Insertion", "Countersinking"] },
+    },
+    categories: ["Laser Cutting","Welding"] },
+  { name: "OSH Cut",          url: "https://www.oshcut.com",                city: "Columbus",      state: "OH", quote: "instant",       uber: false, beta: false,
+    dims: {
+      "Laser Cutting":       { "Fiber Laser":    { min: null, max: null } },
+      "Tube Cutting":        { "5-axis Tube Laser":     { min: null, max: null } },
+      "Tube & Pipe Bending": { "CNC Tube Bender":{ min: null, max: null } },
+    },
+    machines: {
+      "Laser Cutting":        { equip: ["Fiber Laser"],  post: ["Bending", "Powder Coating", "Bead Blasting", "Tumbling", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "Tube Cutting":         { equip: ["5-axis Tube Laser"],    post: ["Powder Coating", "Bead Blasting", "Tumbling", "Tapping", "Deburring"] },
+      "Tube & Pipe Bending":  { equip: ["CNC Tube Bender"], post: ["Tube Bending", "Powder Coating", "Bead Blasting", "Deburring"] },
     },
     categories: ["Laser Cutting","Tube Cutting","Tube & Pipe Bending"] },
   { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", quote: "instant",       uber: false, beta: false,
-    dims: { "Casting & Forging": { min: null, max: '~19.7" (500mm)' } },
+    dims: { "Casting & Forging": { "Investment Casting": { min: null, max: null } } },
     machines: {
       "Casting & Forging": { equip: ["Investment Casting"], post: ["Polishing", "Sandblasting"] },
     },
     categories: ["Casting & Forging"] },
-  { name: "FinalRev",         url: "https://www.finalrev.com",              city: "Berkeley",      state: "CA", quote: "online-manual", uber: false, beta: true,
-    dims: {},
-    machines: {
-      "Laser Cutting":   { equip: ["Fiber Laser"], post: [] },
-      "Waterjet Cutting":{ equip: ["Waterjet"],    post: [] },
-      "CNC Machining":   { equip: ["3-axis CNC", "5-axis CNC"],  post: [] },
-      "Turning":         { equip: ["Millturn"],                 post: [] },
+  { name: "FinalRev",         url: "https://www.finalrev.com",              city: "Berkeley",      state: "CA", quote: "online-manual", uber: true,  beta: true,
+    dims: {
+      "Laser Cutting":    { "Fiber Laser":  { min: null, max: null } },
+      "Waterjet Cutting": { "Waterjet":     { min: null, max: null } },
+      "CNC Milling":      { "3-axis CNC": { min: null, max: null }, "5-axis CNC": { min: null, max: null } },
+      "CNC Routing":      { "CNC Router":   { min: null, max: null } },
+      "Turning":          { "Millturn":     { min: null, max: null } },
     },
-    categories: ["Laser Cutting","Waterjet Cutting","CNC Machining","Turning"] },
-  { name: "Foundation",       url: "https://www.foundation-industries.com", city: null,            state: null, quote: "online-manual", uber: false, beta: true,
-    dims: {},
     machines: {
-      "CNC Machining": { equip: ["3-axis CNC", "5-axis CNC"], post: [] },
+      "Laser Cutting":   { equip: ["Fiber Laser"],              post: ["Countersinking", "Tapping"] },
+      "Waterjet Cutting":{ equip: ["Waterjet"],                 post: ["Countersinking", "Tapping"] },
+      "CNC Milling":     { equip: ["3-axis CNC", "5-axis CNC"], post: ["Countersinking", "Tapping"] },
+      "CNC Routing":     { equip: ["CNC Router"],               post: ["Countersinking", "Tapping"] },
+      "Turning":         { equip: ["Millturn"],                 post: ["Countersinking", "Tapping"] },
     },
-    categories: ["CNC Machining"] },
-  { name: "Loombotic",        url: "https://loombotic.com",                 city: "Toronto",       state: "ON", quote: "instant",       uber: false, beta: false,
-    dims: {},
+    categories: ["Laser Cutting","Waterjet Cutting","CNC Milling","CNC Routing","Turning"] },
+  { name: "Foundation",       url: "https://www.foundation-industries.com", city: "Redwood City",  state: "CA", quote: "online-manual", uber: true,  beta: true,
+    dims: { "CNC Milling": { "3-axis CNC": { min: null, max: null }, "5-axis CNC": { min: null, max: null } } },
     machines: {
-      "Cable Harnessing": { equip: ["Automated Assembly"], post: ["Wire Harness Assembly"] },
+      "CNC Milling": { equip: ["3-axis CNC", "5-axis CNC"], post: [] },
     },
-    categories: ["Cable Harnessing"] },
+    categories: ["CNC Milling"] },
   { name: "Nox Metals",       url: "https://www.noxmetals.co",              city: "Detroit",       state: "MI", quote: "instant",       uber: false, beta: false,
-    dims: {},
+    dims: { "Raw Materials": { "Big Ass Saw": { min: null, max: null }, "Smaller Saws": { min: null, max: null } } },
     machines: {
       "Raw Materials": { equip: ["Big Ass Saw", "Smaller Saws"], post: [] },
     },
@@ -568,43 +773,77 @@ const manufacturers = [
   { name: "Nebula",           url: "https://buildnebula.com",               city: "El Segundo",    state: "CA", quote: "instant",       uber: false, beta: true,
     dims: {},
     machines: {
-      "PCBA": { equip: [], post: ["SMT Assembly"] },
+      "PCBA": { equip: [], post: [] },
     },
     categories: ["PCBA"] },
   { name: "Blitz Panel",      url: "https://blitzpanel.com",                city: "Austin",        state: "TX", quote: "instant",       uber: false, beta: false,
     dims: {},
     machines: {
-      "Control Panel Fabrication": { equip: [], post: ["UL 508A", "DIN-rail Assembly"] },
+      "Control Panel Fabrication": { equip: [], post: [] },
     },
     categories: ["Control Panel Fabrication"] },
-  { name: "Senra Systems",    url: "https://www.senrasystems.us",           city: "Redondo Beach", state: "CA", quote: "online-manual", uber: false, beta: true,
-    dims: {},
-    machines: {
-      "Cable Harnessing": { equip: ["Automated Assembly"], post: ["Aerospace Wire Harness", "Formboard Assembly"] },
-    },
-    categories: ["Cable Harnessing"] },
   { name: "Podium Automation",url: "https://www.podiumautomation.com",      city: "Brooklyn",      state: "NY", quote: "online-manual", uber: false, beta: false,
     dims: {},
     machines: {
-      "Control Panel Fabrication": { equip: [], post: ["UL 508A", "UL 698A"] },
+      "Control Panel Fabrication": { equip: [], post: [] },
     },
     categories: ["Control Panel Fabrication"] },
-  { name: "Ponoko",           url: "https://www.ponoko.com",                city: "Oakland",       state: "CA", quote: "instant",       uber: false, beta: false,
-    dims: { "Laser Cutting": { min: null, max: '~31" x 15"' } },
+  { name: "Ponoko",           url: "https://www.ponoko.com",                city: "Oakland",       state: "CA", quote: "instant",       uber: true,  beta: false,
+    dims: { "Laser Cutting": { "CO2 Laser": { min: null, max: null }, "Fiber Laser": { min: null, max: null } } },
     machines: {
-      "Laser Cutting": { equip: ["CO2 Laser", "Fiber Laser", "Press Brake"], post: ["Bending", "Powder Coating", "UV Printing", "Tapping"] },
+      "Laser Cutting": { equip: ["CO2 Laser", "Fiber Laser"], post: ["Bending", "Powder Coating", "UV Printing", "Tapping"] },
     },
     categories: ["Laser Cutting"] },
   { name: "JawsTec",          url: "https://www.jawstec.com",               city: "American Falls",state: "ID", quote: "instant",       uber: false, beta: false,
-    dims: { "3D Printing": { min: null, max: 'MJF: 15"×11"×15" · SLS: 15"×27.6"×22.8"' } },
+    dims: { "3D Printing": {
+      "MJF": { min: null, max: null },
+      "SLS": { min: null, max: null },
+      "SLA": { min: null, max: null },
+      "FDM": { min: null, max: null },
+    } },
     machines: {
-      "3D Printing": { equip: ["MJF", "SLS", "SLA", "FDM"], post: [] },
+      "3D Printing": { equip: ["MJF", "SLS", "SLA", "FDM"], post: ["Bead Blasting", "Dyeing", "Vapor Polishing", "Support Removal", "Post-Curing"] },
     },
     categories: ["3D Printing"] },
 ];
 
+const SYNONYMS = {
+  'pipe':       ['tube', 'tubing'],
+  'tubing':     ['tube', 'pipe'],
+  'tube':       ['pipe', 'tubing'],
+  'machining':  ['milling', 'cnc'],
+  'milling':    ['machining', 'cnc'],
+  'cnc':        ['milling', 'machining', 'routing'],
+  'router':     ['routing'],
+  'routing':    ['router'],
+  'lathe':      ['turning'],
+  'turning':    ['lathe'],
+  'printing':   ['additive'],
+  'additive':   ['printing'],
+  'harness':    ['cable', 'harnessing'],
+  'harnessing': ['cable', 'harness'],
+  'cable':      ['harness', 'harnessing'],
+  'casting':    ['forging'],
+  'forging':    ['casting'],
+  'stamping':   ['forming'],
+  'forming':    ['stamping'],
+  'molding':    ['injection'],
+  'injection':  ['molding'],
+  'edm':        ['electrical discharge'],
+  'laser':      ['cutting'],
+  'weld':       ['welding'],
+  'welding':    ['weld'],
+  'pcb':        ['pcba', 'circuit', 'board'],
+  'pcba':       ['pcb', 'circuit', 'board'],
+  'sheet':      ['laser', 'waterjet', 'bending'],
+  'plasma':     ['laser', 'cutting'],
+  'material':   ['raw', 'stock'],
+  'stock':      ['raw', 'material'],
+};
+
 const allCategories = [
-  { name: "CNC Machining",            icon: "⚙️" },
+  { name: "CNC Milling",            icon: "⚙️" },
+  { name: "CNC Routing",            icon: "🪚" },
   { name: "Turning",                  icon: "🔁" },
   { name: "Wire EDM",                 icon: "⚡" },
   { name: "Casting & Forging",        icon: "🔥" },
@@ -616,10 +855,9 @@ const allCategories = [
   { name: "Tube & Pipe Bending",      icon: "🔄" },
   { name: "3D Printing",              icon: "🖨️" },
   { name: "Injection Molding",        icon: "🧪" },
-  { name: "Urethane Casting",         icon: "🧫" },
+  { name: "Metal Forming",            icon: "🔩" },
   { name: "Extrusion",                icon: "📏" },
-  { name: "Welding & Assembly",       icon: "🔧" },
-  { name: "PCB Fabrication",          icon: "🔌" },
+  { name: "Welding",                  icon: "🔧" },
   { name: "PCBA",                     icon: "🖥️" },
   { name: "Control Panel Fabrication",icon: "🔲" },
   { name: "Cable Harnessing",         icon: "🪢" },
@@ -638,7 +876,7 @@ function buildDropdowns() {
   procList.innerHTML =
     `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('process',null,'All Processes')">All Processes</div>` +
     allCategories.map(c =>
-      `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.icon} ${c.name.replace(/'/g,"\\'")}')">${c.icon} ${c.name}</div>`
+      `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">${c.name}</div>`
     ).join('');
 
   const states = [...new Set(manufacturers.map(m => m.state))].sort();
@@ -743,10 +981,34 @@ function applyFilters() {
     })),
   ];
 
+  // When searching, sort by relevance: categories whose names match more query words come first
+  if (query) {
+    const words = query.split(/\s+/);
+    catsToShow.sort((a, b) => {
+      const scoreA = words.filter(w => a.name.toLowerCase().includes(w)).length;
+      const scoreB = words.filter(w => b.name.toLowerCase().includes(w)).length;
+      return scoreB - scoreA;
+    });
+  }
+
   let totalVisible = 0;
   const html = catsToShow.map(cat => {
-    // search filters by category/process name
-    if (query && !cat.name.toLowerCase().includes(query)) return '';
+    // search: split query into words, all must appear somewhere in category name,
+    // equipment names, post process names, or manufacturer names
+    if (query) {
+      const words = query.split(/\s+/);
+      const catText = cat.name.toLowerCase();
+      const mfrText = manufacturers
+        .filter(m => m.categories.includes(cat.name))
+        .flatMap(m => {
+          const caps = m.machines && m.machines[cat.name];
+          return [m.name, ...(caps ? [...(caps.equip || []), ...(caps.post || [])] : [])];
+        })
+        .join(' ').toLowerCase();
+      const searchable = catText + ' ' + mfrText;
+      const termSets = words.map(w => [w, ...(SYNONYMS[w] || [])]);
+      if (!termSets.every(terms => terms.some(t => searchable.includes(t)))) return '';
+    }
 
     const matching = manufacturers.filter(m => {
       if (!m.categories.includes(cat.name)) return false;
@@ -759,11 +1021,10 @@ function applyFilters() {
       return `
       <div class="category-section">
         <div class="category-header">
-          <div class="category-icon">${cat.icon}</div>
           <span class="category-title">${cat.name}</span>
         </div>
         <div class="section-stripe"></div>
-        <a class="add-mfr-btn" href="${FORM_LINKS.submit}" target="_blank">+ Add Manufacturer</a>
+        <button class="add-mfr-btn" onclick="openSubmitModal()">+ Add Manufacturer</button>
       </div>`;
     }
     totalVisible += matching.length;
@@ -778,36 +1039,50 @@ function applyFilters() {
       const catCaps = m.machines && m.machines[cat.name];
       const equipList = catCaps && catCaps.equip && catCaps.equip.length ? catCaps.equip.join(', ') : null;
       const postList  = catCaps && catCaps.post  && catCaps.post.length  ? catCaps.post.join(', ')  : null;
-      const addInfoUrl = `${FORM_LINKS.incorrectInfo}?entry.mfr=${encodeURIComponent(m.name)}`;
-      const addBtn = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Info</a>`;
+      const mfrEsc = m.name.replace(/'/g, "\\'");
+      const catEsc = cat.name.replace(/'/g, "\\'");
 
-      const addEquipBtn = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Machine</a>`;
-      const addPostBtn  = `<a class="add-info-btn" href="${addInfoUrl}" target="_blank">+ Add Post Process</a>`;
+      const addEquipBtn = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','machine')">+ Add Machine</button>`;
+      const addPostBtn  = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','post')">+ Add Post Process</button>`;
+      const addMaxBtn   = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','max')">+ Add</button>`;
+      const addMinBtn   = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','min')">+ Add</button>`;
       const machinesHtml = `<div style="display:flex;flex-direction:column;gap:4px;">
         <div class="mfr-machines"><span class="cap-label">Machines:</span> ${equipList ? equipList + ' ' : ''}${addEquipBtn}</div>
         <div class="mfr-machines"><span class="cap-label">Post Processes:</span> ${postList ? postList + ' ' : ''}${addPostBtn}</div>
       </div>`;
 
       const catDims = m.dims && m.dims[cat.name];
-      const dimsHtml = `<div class="mfr-dims">${
-        catDims && catDims.max ? `Max: ${catDims.max}` : `Max: ${addBtn}`
-      }<br>${
-        catDims && catDims.min ? `Min: ${catDims.min}` : `Min: ${addBtn}`
-      }</div>`;
+      const isPerMachine = catDims && !('min' in catDims) && !('max' in catDims) && Object.keys(catDims).length > 0;
+      let dimsHtml;
+      if (isPerMachine) {
+        const rows = Object.entries(catDims).map(([mach, d]) => {
+          const me = mach.replace(/'/g, "\\'");
+          const maxB = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','max','${me}')">+ Add</button>`;
+          const minB = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','min','${me}')">+ Add</button>`;
+          return `<div style="margin-bottom:2px;white-space:nowrap"><span class="cap-label" style="font-size:10px">${mach}:</span> Max: ${d && d.max ? d.max : maxB} · Min: ${d && d.min ? d.min : minB}</div>`;
+        }).join('');
+        dimsHtml = `<div class="mfr-dims">${rows}</div>`;
+      } else {
+        dimsHtml = `<div class="mfr-dims">${
+          catDims && catDims.max ? `Max: ${catDims.max}` : `Max: ${addMaxBtn}`
+        }<br>${
+          catDims && catDims.min ? `Min: ${catDims.min}` : `Min: ${addMinBtn}`
+        }</div>`;
+      }
 
       return `
-      <div class="mfr-card" style="animation-delay:${i*0.03}s">
+      <div class="mfr-card" style="animation-delay:${i*0.03}s" onclick="if(!event.target.closest('button'))window.open('${m.url}','_blank','noopener')">
         <div class="mfr-card-top">
           <div style="display:flex;align-items:center;gap:8px;">
-            ${m.beta ? '<span class="tag tag-beta">Beta</span>' : ''}
-            <a class="mfr-name" href="${m.url}" target="_blank" rel="noopener">${m.name} ↗</a>
+            ${(m.beta || (m.betaCategories && m.betaCategories.includes(cat.name))) ? '<span class="tag tag-beta">Beta</span>' : ''}
+            <span class="mfr-name">${m.name} ↗</span>
           </div>
           <div class="mfr-meta">
             ${m.quote==='instant'
               ? '<span class="tag tag-instant">⚡ Instant Quote</span>'
               : m.quote==='online-manual'
               ? '<span class="tag tag-online-manual">🖥️ Online Platform Manual Quote</span>'
-              : '<span class="tag tag-email">✉️ Email Quote</span>'}
+              : '<span class="tag tag-email">✉️ Email/Form Submission Quote</span>'}
             ${m.uber ? '<span class="tag tag-uber">🚗 Uber Courier</span>' : ''}
           </div>
         </div>
@@ -822,12 +1097,11 @@ function applyFilters() {
     return `
       <div class="category-section">
         <div class="category-header">
-          <div class="category-icon">${cat.icon}</div>
           <span class="category-title">${cat.name}</span>
         </div>
         <div class="section-stripe"></div>
         <div class="mfr-list">${cards}</div>
-        <a class="add-mfr-btn" href="${FORM_LINKS.submit}" target="_blank">+ Add Manufacturer</a>
+        <button class="add-mfr-btn" onclick="openSubmitModal()">+ Add Manufacturer</button>
       </div>`;
   }).join('');
 
@@ -868,10 +1142,147 @@ function shuffle(arr) {
   return a;
 }
 
+// ── INLINE FORMS ──
+function openUpdateModal(mfrName, category, updateType, machine = '') {
+  // Reset all fields
+  ['machine','post','max','min','process','notes','mfr'].forEach(f => {
+    document.getElementById('um-field-' + f).classList.add('field-hidden');
+    if (document.getElementById('um-' + f)) document.getElementById('um-' + f).value = '';
+  });
+  document.getElementById('um-mfr-editable').value = '';
+  document.getElementById('um-extra').value = '';
+  document.getElementById('um-email').value = '';
+  document.getElementById('update-form').style.display = '';
+  document.getElementById('update-success').style.display = 'none';
+  const btn = document.getElementById('um-submit-btn');
+  btn.textContent = 'Submit'; btn.disabled = false;
+
+  // Store context
+  document.getElementById('um-mfr-name').value    = mfrName || '';
+  document.getElementById('um-category').value    = category || '';
+  const typeLabels = {
+    machine:   'Add Machine',
+    post:      'Add Post Process',
+    max:       'Add Max Part Size',
+    min:       'Add Min Part Size',
+    incorrect: 'Incorrect Information',
+    request:   'Request a Category',
+  };
+  document.getElementById('um-type').value = typeLabels[updateType] || updateType;
+  document.getElementById('um-machine-name').value = machine || '';
+
+  // Context badge
+  const ctx = document.getElementById('um-context');
+  const ctxParts = [mfrName, category, machine].filter(Boolean);
+  if (ctxParts.length) {
+    ctx.innerHTML = ctxParts.map((p, i) => i === 0 ? `<strong>${p}</strong>` : p).join(' · ');
+    ctx.classList.remove('field-hidden');
+  } else {
+    ctx.classList.add('field-hidden');
+  }
+
+  // Title + icon by type
+  const cfg = {
+    machine:   { icon: '⚙️', title: 'Add a Machine' },
+    post:      { icon: '🔧', title: 'Add a Post Process' },
+    max:       { icon: '📐', title: 'Add Max Part Size' },
+    min:       { icon: '📐', title: 'Add Min Part Size' },
+    incorrect: { icon: '⚑',  title: 'Report Incorrect Info' },
+    request:   { icon: '➕', title: 'Request a Category' },
+  }[updateType] || { icon: '✏️', title: 'Add Information' };
+  document.getElementById('um-icon').textContent  = cfg.icon;
+  document.getElementById('um-title').textContent = cfg.title;
+
+  // Show the relevant primary field
+  const fieldMap = { machine:'machine', post:'post', max:'max', min:'min', incorrect:'notes', request:'process' };
+  const fieldId  = fieldMap[updateType];
+  if (fieldId) document.getElementById('um-field-' + fieldId).classList.remove('field-hidden');
+
+  // For global "report incorrect" with no mfr pre-filled, show editable mfr field
+  if (updateType === 'incorrect' && !mfrName) {
+    document.getElementById('um-field-mfr').classList.remove('field-hidden');
+  }
+
+  // Hide the extra notes for 'incorrect' (the notes field IS the primary input)
+  document.getElementById('um-field-extra').classList.toggle('field-hidden', updateType === 'incorrect');
+
+  openModal('update-modal');
+}
+
+function openSubmitModal() {
+  ['sm-name','sm-url','sm-city','sm-state','sm-categories','sm-notes','sm-email'].forEach(id => {
+    document.getElementById(id).value = '';
+    document.getElementById(id).classList.remove('invalid');
+  });
+  document.getElementById('sm-quote').value = '';
+  document.getElementById('submit-form').style.display = '';
+  document.getElementById('submit-success').style.display = 'none';
+  const btn = document.getElementById('sm-submit-btn');
+  btn.textContent = 'Submit Manufacturer'; btn.disabled = false;
+  openModal('submit-modal');
+}
+
+async function submitUpdateForm() {
+  const type       = document.getElementById('um-type').value;
+  const mfrName    = document.getElementById('um-mfr-name').value || document.getElementById('um-mfr-editable').value;
+  const machineName = document.getElementById('um-machine-name').value;
+  const extra      = document.getElementById('um-extra').value;
+  const notes      = [document.getElementById('um-notes').value, extra].filter(Boolean).join(' | ');
+  // Prefix machine name onto size values so reviewer knows which machine it's for
+  const sizePrefix = machineName ? `[${machineName}] ` : '';
+
+  const f = FORMS.updateInfo.fields;
+  const data = {
+    [f.mfrName]:    mfrName,
+    [f.category]:   document.getElementById('um-category').value,
+    [f.updateType]: type,
+    [f.machine]:    document.getElementById('um-machine').value,
+    [f.postProcess]:document.getElementById('um-post').value,
+    [f.minSize]:    document.getElementById('um-min').value ? sizePrefix + document.getElementById('um-min').value : '',
+    [f.maxSize]:    document.getElementById('um-max').value ? sizePrefix + document.getElementById('um-max').value : '',
+    [f.notes]:      notes,
+    [f.email]:      document.getElementById('um-email').value,
+  };
+
+  const btn = document.getElementById('um-submit-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  await postToGoogleForms(FORMS.updateInfo.endpoint, data);
+  closeModal('update-modal');
+  showToast();
+}
+
+async function submitMfrForm() {
+  const name = document.getElementById('sm-name').value.trim();
+  const url  = document.getElementById('sm-url').value.trim();
+  document.getElementById('sm-name').classList.toggle('invalid', !name);
+  document.getElementById('sm-url').classList.toggle('invalid',  !url);
+  if (!name || !url) return;
+
+  const f = FORMS.submitMfr.fields;
+  const data = {
+    [f.companyName]: name,
+    [f.url]:         url,
+    [f.city]:        document.getElementById('sm-city').value,
+    [f.state]:       document.getElementById('sm-state').value,
+    [f.quoteType]:   document.getElementById('sm-quote').value,
+    [f.categories]:  document.getElementById('sm-categories').value,
+    [f.notes]:       document.getElementById('sm-notes').value,
+    [f.email]:       document.getElementById('sm-email').value,
+  };
+
+  const btn = document.getElementById('sm-submit-btn');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  await postToGoogleForms(FORMS.submitMfr.endpoint, data);
+  closeModal('submit-modal');
+  showToast();
+}
+
 // ── INIT ──
 buildDropdowns();
 applyFilters();
+
 </script>
 
+<div class="toast" id="toast">Response submitted.</div>
 </body>
 </html>
