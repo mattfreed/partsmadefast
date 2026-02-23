@@ -764,6 +764,7 @@ const manufacturers = [
       "CNC Milling":      { "3-axis CNC": { min: null, max: null }, "5-axis CNC": { min: null, max: null } },
       "CNC Routing":      { "CNC Router":   { min: null, max: null } },
       "Turning":          { "Millturn":     { min: null, max: null } },
+      "Micro Gears":      { "Millturn": { min: null, max: null }, "CNC Router": { min: null, max: null } },
     },
     machines: {
       "Laser Cutting":   { equip: ["Fiber Laser"],              post: ["Countersinking", "Tapping"] },
@@ -771,8 +772,9 @@ const manufacturers = [
       "CNC Milling":     { equip: ["3-axis CNC", "5-axis CNC"], post: ["Countersinking", "Tapping"] },
       "CNC Routing":     { equip: ["CNC Router"],               post: ["Countersinking", "Tapping"] },
       "Turning":         { equip: ["Millturn"],                 post: ["Countersinking", "Tapping"] },
+      "Micro Gears":     { equip: ["Millturn", "CNC Router"], post: [] },
     },
-    categories: ["Laser Cutting","Waterjet Cutting","CNC Milling","CNC Routing","Turning"] },
+    categories: ["Laser Cutting","Waterjet Cutting","CNC Milling","CNC Routing","Turning","Micro Gears"] },
   { name: "Foundation",       url: "https://www.foundation-industries.com", city: "Redwood City",  state: "CA", quote: "online-manual", uber: true,  beta: true,
     dims: { "CNC Milling": { "3-axis CNC": { min: null, max: null }, "5-axis CNC": { min: null, max: null } } },
     machines: {
@@ -876,6 +878,7 @@ const allCategories = [
   { name: "PCBA",                     icon: "🖥️" },
   { name: "Control Panel Fabrication",icon: "🔲" },
   { name: "Cable Harnessing",         icon: "🪢" },
+  { name: "Micro Gears",              icon: "⚙️" },
   { name: "Raw Materials",            icon: "🏗️" },
 ];
 
