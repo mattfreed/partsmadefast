@@ -660,8 +660,9 @@ const FORMS = {
       mfrName:    'entry.2018899847',
       category:   'entry.1350813213',
       updateType: 'entry.823762915',
-      machine:    'entry.1051368037',
-      postProcess:'entry.1459081534',
+      machineName:'entry.1051368037',
+      machine:    'entry.1459081534',
+      postProcess:'entry.219333434',
       minSize:    'entry.1195394525',
       maxSize:    'entry.1871885677',
       notes:      'entry.1167365685',
@@ -1240,15 +1241,16 @@ async function submitUpdateForm() {
   const machineName = document.getElementById('um-machine-name').value;
   const extra      = document.getElementById('um-extra').value;
   const processReq = document.getElementById('um-process').value;
-  const notes      = [processReq ? `Requested category: ${processReq}` : '', document.getElementById('um-notes').value, extra].filter(Boolean).join(' | ');
+  const notes      = [document.getElementById('um-notes').value, extra].filter(Boolean).join(' | ');
   // Prefix machine name onto size values so reviewer knows which machine it's for
   const sizePrefix = machineName ? `[${machineName}] ` : '';
 
   const f = FORMS.updateInfo.fields;
   const data = {
     [f.mfrName]:    mfrName,
-    [f.category]:   document.getElementById('um-category').value,
+    [f.category]:   processReq || document.getElementById('um-category').value,
     [f.updateType]: type,
+    [f.machineName]:document.getElementById('um-machine-name').value,
     [f.machine]:    document.getElementById('um-machine').value,
     [f.postProcess]:document.getElementById('um-post').value,
     [f.minSize]:    document.getElementById('um-min').value ? sizePrefix + document.getElementById('um-min').value : '',
