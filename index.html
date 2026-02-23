@@ -4,6 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>U.S.A. Parts Made Fast</title>
+<link rel="icon" type="image/svg+xml" href="Flag_of_the_United_States.svg">
+
+<!-- Open Graph / Facebook / LinkedIn -->
+<meta property="og:type"        content="website">
+<meta property="og:url"         content="https://partsmadefast.com/">
+<meta property="og:title"       content="U.S.A. Parts Made Fast">
+<meta property="og:description" content="A community-curated directory of U.S.-based quick-turn manufacturers.">
+<meta property="og:image"       content="https://partsmadefast.com/Flag_of_the_United_States.png">
+
+<!-- X Card -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:url"         content="https://partsmadefast.com/">
+<meta name="twitter:title"       content="U.S.A. Parts Made Fast">
+<meta name="twitter:description" content="A community-curated directory of U.S.-based quick-turn manufacturers.">
+<meta name="twitter:image"       content="https://partsmadefast.com/Flag_of_the_United_States.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -720,8 +735,8 @@ const manufacturers = [
       "Welding":       { "MIG Welder": { min: null, max: null }, "TIG Welder": { min: null, max: null } },
     },
     machines: {
-      "Laser Cutting":      { equip: ["Fiber Laser"], post: ["Bending", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
-      "Welding": { equip: ["MIG Welder", "TIG Welder"],   post: ["Tapping", "Hardware Insertion", "Countersinking"] },
+      "Laser Cutting":      { equip: ["Fiber Laser"], post: ["Bending", "Powder Coating", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
+      "Welding": { equip: ["MIG Welder", "TIG Welder"],   post: ["Powder Coating", "Tapping", "Hardware Insertion", "Countersinking"] },
     },
     categories: ["Laser Cutting","Welding"] },
   { name: "OSH Cut",          url: "https://www.oshcut.com",                city: "Columbus",      state: "OH", quote: "instant",       uber: false, beta: false,
@@ -736,7 +751,7 @@ const manufacturers = [
       "Tube & Pipe Bending":  { equip: ["CNC Tube Bender"], post: ["Tube Bending", "Powder Coating", "Bead Blasting", "Deburring"] },
     },
     categories: ["Laser Cutting","Tube Cutting","Tube & Pipe Bending"] },
-  { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", quote: "instant",       uber: false, beta: false,
+  { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", locations: [{city:"San Francisco",state:"CA"},{city:"Austin",state:"TX"}], quote: "instant",       uber: false, beta: false,
     dims: { "Casting & Forging": { "Investment Casting": { min: null, max: null } } },
     machines: {
       "Casting & Forging": { equip: ["Investment Casting"], post: ["Polishing", "Sandblasting"] },
@@ -879,7 +894,7 @@ function buildDropdowns() {
       `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">${c.name}</div>`
     ).join('');
 
-  const states = [...new Set(manufacturers.map(m => m.state))].sort();
+  const states = [...new Set(manufacturers.flatMap(m => m.locations ? m.locations.map(l => l.state) : [m.state]))].sort();
   const stateList = document.getElementById('state-list');
   stateList.innerHTML =
     `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('state',null,'All States')">All States</div>` +
@@ -967,14 +982,14 @@ function applyFilters() {
   const catsToShow = [
     ...catsShuffled.filter(cat => manufacturers.some(m => {
       if (!m.categories.includes(cat.name)) return false;
-      if (selectedState && m.state !== selectedState) return false;
+      if (selectedState && !(m.locations ? m.locations.some(l => l.state === selectedState) : m.state === selectedState)) return false;
       if (instantOnly && m.quote !== 'instant') return false;
       if (uberOnly && !m.uber) return false;
       return true;
     })),
     ...catsShuffled.filter(cat => !manufacturers.some(m => {
       if (!m.categories.includes(cat.name)) return false;
-      if (selectedState && m.state !== selectedState) return false;
+      if (selectedState && !(m.locations ? m.locations.some(l => l.state === selectedState) : m.state === selectedState)) return false;
       if (instantOnly && m.quote !== 'instant') return false;
       if (uberOnly && !m.uber) return false;
       return true;
@@ -1012,7 +1027,7 @@ function applyFilters() {
 
     const matching = manufacturers.filter(m => {
       if (!m.categories.includes(cat.name)) return false;
-      if (selectedState && m.state !== selectedState) return false;
+      if (selectedState && !(m.locations ? m.locations.some(l => l.state === selectedState) : m.state === selectedState)) return false;
       if (instantOnly && m.quote !== 'instant') return false;
       if (uberOnly && !m.uber) return false;
       return true;
@@ -1087,7 +1102,7 @@ function applyFilters() {
           </div>
         </div>
         <div class="mfr-card-bottom">
-          ${(m.city || m.state) ? `<div class="mfr-location">📍 ${[m.city, m.state].filter(Boolean).join(', ')}</div>` : ''}
+          ${(m.locations || m.city || m.state) ? `<div style="display:flex;flex-direction:column;gap:2px;">${m.locations ? m.locations.map(l => `<div class="mfr-location">📍 ${[l.city, l.state].filter(Boolean).join(', ')}</div>`).join('') : `<div class="mfr-location">📍 ${[m.city, m.state].filter(Boolean).join(', ')}</div>`}</div>` : ''}
           ${machinesHtml}
           ${dimsHtml}
         </div>
