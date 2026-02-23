@@ -1239,7 +1239,8 @@ async function submitUpdateForm() {
   const mfrName    = document.getElementById('um-mfr-name').value || document.getElementById('um-mfr-editable').value;
   const machineName = document.getElementById('um-machine-name').value;
   const extra      = document.getElementById('um-extra').value;
-  const notes      = [document.getElementById('um-notes').value, extra].filter(Boolean).join(' | ');
+  const processReq = document.getElementById('um-process').value;
+  const notes      = [processReq ? `Requested category: ${processReq}` : '', document.getElementById('um-notes').value, extra].filter(Boolean).join(' | ');
   // Prefix machine name onto size values so reviewer knows which machine it's for
   const sizePrefix = machineName ? `[${machineName}] ` : '';
 
