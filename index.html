@@ -796,6 +796,12 @@ const manufacturers = [
       "Raw Materials": { equip: ["Big Ass Saw", "Smaller Saws"], post: [] },
     },
     categories: ["Raw Materials"] },
+  { name: "OSH Stencils",     url: "https://www.oshstencils.com",           city: "Provo",         state: "UT", quote: "instant",       uber: false, beta: false,
+    dims: { "PCB Stencils": { "Laser Cutter": { min: null, max: null } } },
+    machines: {
+      "PCB Stencils": { equip: ["Laser Cutter"], post: [] },
+    },
+    categories: ["PCB Stencils"] },
   { name: "Nebula",           url: "https://buildnebula.com",               city: "El Segundo",    state: "CA", quote: "instant",       uber: false, beta: true,
     dims: {},
     machines: {
@@ -884,6 +890,7 @@ const allCategories = [
   { name: "Extrusion",                icon: "📏" },
   { name: "Welding",                  icon: "🔧" },
   { name: "PCBA",                     icon: "🖥️" },
+  { name: "PCB Stencils",             icon: "🔲" },
   { name: "Control Panel Fabrication",icon: "🔲" },
   { name: "Cable Harnessing",         icon: "🪢" },
   { name: "Wood",                     icon: "🪵" },
