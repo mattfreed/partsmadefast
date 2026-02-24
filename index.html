@@ -840,6 +840,12 @@ const manufacturers = [
       "Sheet Metal & Plate Bending": { equip: ["Press Brake"], post: ["Powder Coating", "UV Printing", "Tapping"] },
     },
     categories: ["Laser Cutting","Sheet Metal & Plate Bending"] },
+  { name: "Streamline 3D",    url: "https://www.streamline-3d.com",         city: "Fresno",        state: "CA", quote: "instant",       uber: false, beta: false,
+    dims: { "3D Printing": { "MJF": { min: null, max: null }, "FDM": { min: null, max: null } } },
+    machines: {
+      "3D Printing": { equip: ["MJF", "FDM"], post: ["Ultimate Finish", "Cerakote", "Vapor Smoothing", "Vibratory Tumbling", "Shot Peen", "Raw Grey", "Dyed Black", "UV Powder Coating"] },
+    },
+    categories: ["3D Printing"] },
   { name: "Corvallis3D",      url: "https://www.corvallis3d.com",           city: "Beaverton",     state: "OR", quote: "instant",       uber: false, beta: false,
     dims: { "3D Printing": { "FDM": { min: null, max: null } } },
     machines: {
