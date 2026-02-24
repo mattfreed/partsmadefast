@@ -719,6 +719,16 @@ const manufacturers = [
       "Sheet Metal & Plate Bending": { equip: ["Press Brake"], post: ["Powder Coating", "Anodizing", "Zinc Plating", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
     },
     categories: ["Laser Cutting","Waterjet Cutting","CNC Milling","CNC Routing","Sheet Metal & Plate Bending"] },
+  { name: "Laser Bros",       url: "https://laserbros.com",                 city: "Graham",        state: "NC", quote: "instant",       uber: false, beta: false,
+    dims: {
+      "Laser Cutting":               { "Fiber Laser": { min: null, max: null } },
+      "Sheet Metal & Plate Bending": { "Press Brake": { min: null, max: null } },
+    },
+    machines: {
+      "Laser Cutting":               { equip: ["Fiber Laser"], post: ["Bending", "Orbital Sanding", "Linear Sanding", "Tumble Finish", "Pristine Finish"] },
+      "Sheet Metal & Plate Bending": { equip: ["Press Brake"], post: ["Orbital Sanding", "Linear Sanding", "Tumble Finish", "Pristine Finish"] },
+    },
+    categories: ["Laser Cutting", "Sheet Metal & Plate Bending"] },
   { name: "Fabworks",         url: "https://www.fabworks.com",              city: "Ventura",       state: "CA", quote: "instant",       uber: false, beta: false,
     betaCategories: ["Welding"],
     dims: {
