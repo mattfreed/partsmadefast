@@ -82,7 +82,7 @@
     text-transform: uppercase; cursor: pointer; border: none;
     text-decoration: none; transition: all 0.15s; white-space: nowrap;
   }
-  .btn-primary  { background: var(--accent); color: #000; }
+  .btn-primary  { background: var(--accent); color: #000; border: 1.5px solid transparent; }
   .btn-primary:hover  { background: #f5b840; }
   .btn-outline  { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
   .btn-outline:hover  { border-color: var(--accent); color: var(--accent); }
@@ -372,7 +372,9 @@
     h1 { font-size: 32px; }
     .tagline { font-size: 13px; }
     .header-actions { gap: 8px; flex-wrap: nowrap; width: 100%; }
-    .header-actions .btn { font-size: 12px; padding: 7px 10px; flex: 1; justify-content: center; white-space: nowrap; }
+    .header-actions .btn { font-size: 12px; padding: 7px 10px; flex: 1; justify-content: center; align-items: center; white-space: nowrap; display: flex; line-height: 1; }
+    .header-actions .btn-outline { background: transparent; border: 1.5px solid var(--accent); color: var(--text); }
+    .header-actions .btn-outline:hover { background: transparent; border-color: var(--accent); color: var(--accent); }
 
     .toolbar { padding: 10px 16px; gap: 8px; }
     /* Search takes its own full row */
@@ -454,8 +456,8 @@
     <p class="tagline" style="margin-top:20px; font-size:13px; font-style:italic;">My hope is that this list helps you find quick-turn partners and reveals where gaps exist: processes still waiting to be brought to quick-turn, and legacy industries yet to unlock instant quoting.</p>
   </div>
   <div class="header-actions">
-    <button class="btn btn-primary" onclick="openSubmitModal()">➕ Submit Manufacturer</button>
-    <button class="btn btn-outline" onclick="openUpdateModal('','','incorrect')">⚑ Report Incorrect Information</button>
+    <button class="btn btn-primary" onclick="openSubmitModal()">+ Submit Manufacturer</button>
+    <button class="btn btn-outline" onclick="openUpdateModal('','','incorrect')">Report Incorrect Info</button>
   </div>
 </header>
 
