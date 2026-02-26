@@ -774,6 +774,12 @@ const manufacturers = [
       "Sheet Metal & Plate Bending": { equip: ["Press Brake"], post: ["Powder Coating", "Bead Blasting", "Tumbling", "Tapping", "Hardware Insertion", "Countersinking", "Deburring"] },
     },
     categories: ["Laser Cutting","Tube Cutting","Tube & Pipe Bending","Sheet Metal & Plate Bending"] },
+  { name: "Carrera Casting",  url: "https://carreracasting.com",            city: "New York",      state: "NY", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Casting & Forging": { equip: ["Investment Casting", "Silicone Mold", "3D Scanner"], post: [] },
+    },
+    categories: ["Casting & Forging"] },
   { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", locations: [{city:"San Francisco",state:"CA"},{city:"Austin",state:"TX"}], quote: "instant",       uber: false, beta: false,
     dims: { "Casting & Forging": { "Investment Casting": { min: null, max: null } } },
     machines: {
@@ -804,6 +810,22 @@ const manufacturers = [
       "CNC Milling": { equip: ["3-axis CNC", "5-axis CNC"], post: ["Anodizing", "Tapping", "Deburring"] },
     },
     categories: ["CNC Milling"] },
+  { name: "McMaster-Carr",    url: "https://www.mcmaster.com",              city: "Elmhurst",      state: "IL", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Hardware & Fasteners":  { equip: [], post: [] },
+      "CNC & Machine Tooling": { equip: [], post: [] },
+      "Consumables / MRO":     { equip: [], post: [] },
+      "Raw Materials":         { equip: [], post: [] },
+    },
+    categories: ["Hardware & Fasteners", "CNC & Machine Tooling", "Consumables / MRO", "Raw Materials"] },
+  { name: "Gen 3 Industrial", url: "https://www.gen3industrial.com",         city: "East Jordan",   state: "MI", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "CNC & Machine Tooling": { equip: [], post: [] },
+      "Consumables / MRO":     { equip: [], post: [] },
+    },
+    categories: ["CNC & Machine Tooling", "Consumables / MRO"] },
   { name: "Nox Metals",       url: "https://www.noxmetals.co",              city: "Detroit",       state: "MI", quote: "instant",       uber: false, beta: false,
     dims: { "Raw Materials": { "Big Ass Saw": { min: null, max: null }, "Smaller Saws": { min: null, max: null } } },
     machines: {
@@ -856,29 +878,65 @@ const manufacturers = [
       "Sheet Metal & Plate Bending": { equip: ["Press Brake"], post: ["Powder Coating", "UV Printing", "Tapping"] },
     },
     categories: ["Laser Cutting","Sheet Metal & Plate Bending"] },
+  { name: "Incept3D",         url: "https://incept3d.com",                  city: "San Diego",     state: "CA", quote: "instant",       uber: false, beta: false,
+    dims: {
+      "FDM 3D Printing": { "FDM": { min: null, max: null } },
+      "SLA 3D Printing": { "SLA": { min: null, max: null } },
+    },
+    machines: {
+      "FDM 3D Printing": { equip: ["FDM"], post: [] },
+      "SLA 3D Printing": { equip: ["SLA"], post: [] },
+    },
+    categories: ["FDM 3D Printing", "SLA 3D Printing"] },
+  { name: "Formlabs Now",     url: "https://now.formlabs.com",              city: null,            state: null, quote: "instant",       uber: false, beta: false,
+    dims: {
+      "SLA 3D Printing": { "SLA": { min: null, max: null } },
+      "SLS 3D Printing": { "SLS": { min: null, max: null } },
+    },
+    machines: {
+      "SLA 3D Printing": { equip: ["SLA"], post: [] },
+      "SLS 3D Printing": { equip: ["SLS"], post: [] },
+    },
+    categories: ["SLA 3D Printing", "SLS 3D Printing"] },
   { name: "Streamline 3D",    url: "https://www.streamline-3d.com",         city: "Fresno",        state: "CA", quote: "instant",       uber: false, beta: false,
-    dims: { "3D Printing": { "MJF": { min: null, max: null }, "FDM": { min: null, max: null } } },
+    dims: { "MJF 3D Printing": { "MJF": { min: null, max: null } }, "FDM 3D Printing": { "FDM": { min: null, max: null } } },
     machines: {
-      "3D Printing": { equip: ["MJF", "FDM"], post: ["Ultimate Finish", "Cerakote", "Vapor Smoothing", "Vibratory Tumbling", "Shot Peen", "Raw Grey", "Dyed Black", "UV Powder Coating"] },
+      "MJF 3D Printing": { equip: ["MJF"], post: ["Ultimate Finish", "Cerakote", "Vapor Smoothing", "Vibratory Tumbling", "Shot Peen", "Raw Grey", "Dyed Black", "UV Powder Coating"] },
+      "FDM 3D Printing": { equip: ["FDM"], post: ["Ultimate Finish", "Cerakote", "Vapor Smoothing", "Vibratory Tumbling", "Shot Peen", "Raw Grey", "Dyed Black", "UV Powder Coating"] },
     },
-    categories: ["3D Printing"] },
+    categories: ["MJF 3D Printing", "FDM 3D Printing"] },
   { name: "Corvallis3D",      url: "https://www.corvallis3d.com",           city: "Beaverton",     state: "OR", quote: "instant",       uber: false, beta: false,
-    dims: { "3D Printing": { "FDM": { min: null, max: null } } },
+    dims: { "FDM 3D Printing": { "FDM": { min: null, max: null } } },
     machines: {
-      "3D Printing": { equip: ["FDM"], post: [] },
+      "FDM 3D Printing": { equip: ["FDM"], post: [] },
     },
-    categories: ["3D Printing"] },
+    categories: ["FDM 3D Printing"] },
+  { name: "Slant 3D",         url: "https://www.slant3d.com",               city: "Nampa",         state: "ID", quote: "online-manual", uber: false, beta: false,
+    dims: { "FDM 3D Printing": { "FDM": { min: null, max: null } } },
+    machines: {
+      "FDM 3D Printing": { equip: ["FDM"], post: [] },
+    },
+    categories: ["FDM 3D Printing"] },
+  { name: "ONNYX Fab",        url: "https://onnyxfab.com",                  city: null,            state: null, quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "PCBA": { equip: [], post: [] },
+    },
+    categories: ["PCBA"] },
   { name: "JawsTec",          url: "https://www.jawstec.com",               city: "American Falls",state: "ID", quote: "instant",       uber: false, beta: false,
-    dims: { "3D Printing": {
-      "MJF": { min: null, max: null },
-      "SLS": { min: null, max: null },
-      "SLA": { min: null, max: null },
-      "FDM": { min: null, max: null },
-    } },
-    machines: {
-      "3D Printing": { equip: ["MJF", "SLS", "SLA", "FDM"], post: ["Bead Blasting", "Dyeing", "Vapor Polishing", "Support Removal", "Post-Curing"] },
+    dims: {
+      "MJF 3D Printing": { "MJF": { min: null, max: null } },
+      "SLS 3D Printing": { "SLS": { min: null, max: null } },
+      "SLA 3D Printing": { "SLA": { min: null, max: null } },
+      "FDM 3D Printing": { "FDM": { min: null, max: null } },
     },
-    categories: ["3D Printing"] },
+    machines: {
+      "MJF 3D Printing": { equip: ["MJF"], post: ["Bead Blasting", "Dyeing", "Vapor Polishing", "Support Removal", "Post-Curing"] },
+      "SLS 3D Printing": { equip: ["SLS"], post: ["Bead Blasting", "Dyeing", "Vapor Polishing", "Support Removal", "Post-Curing"] },
+      "SLA 3D Printing": { equip: ["SLA"], post: ["Support Removal", "Post-Curing", "Vapor Polishing"] },
+      "FDM 3D Printing": { equip: ["FDM"], post: ["Support Removal", "Post-Curing"] },
+    },
+    categories: ["MJF 3D Printing", "SLS 3D Printing", "SLA 3D Printing", "FDM 3D Printing"] },
 ];
 
 const SYNONYMS = {
@@ -928,7 +986,10 @@ const allCategories = [
   { name: "Laser Cutting",            icon: "🔦" },
   { name: "Tube Cutting",             icon: "✂️" },
   { name: "Tube & Pipe Bending",      icon: "🔄" },
-  { name: "3D Printing",              icon: "🖨️" },
+  { name: "FDM 3D Printing",          icon: "🖨️" },
+  { name: "SLS 3D Printing",          icon: "🖨️" },
+  { name: "SLA 3D Printing",          icon: "🖨️" },
+  { name: "MJF 3D Printing",          icon: "🖨️" },
   { name: "Injection Molding",        icon: "🧪" },
   { name: "Thermoforming",            icon: "🌡️" },
   { name: "Metal Forming",            icon: "🔩" },
@@ -946,6 +1007,9 @@ const allCategories = [
   { name: "Sheet Metal & Plate Bending", icon: "📐" },
   { name: "Micro Gears",              icon: "⚙️" },
   { name: "Raw Materials",            icon: "🏗️" },
+  { name: "Hardware & Fasteners",     icon: "🔩" },
+  { name: "CNC & Machine Tooling",    icon: "🛠️" },
+  { name: "Consumables / MRO",        icon: "📦" },
 ];
 
 // ── FILTER STATE ──
