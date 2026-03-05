@@ -905,6 +905,16 @@ const manufacturers = [
       "FDM 3D Printing": { equip: ["FDM"], post: ["Ultimate Finish", "Cerakote", "Vapor Smoothing", "Vibratory Tumbling", "Shot Peen", "Raw Grey", "Dyed Black", "UV Powder Coating"] },
     },
     categories: ["MJF 3D Printing", "FDM 3D Printing"] },
+  { name: "Chatelet Manufacturing", url: "https://www.chateletusa.com",       city: "Orlando",       state: "FL", quote: "instant",       uber: false, beta: false,
+    dims: {
+      "FDM 3D Printing": { "FDM": { min: null, max: null } },
+      "SLA 3D Printing": { "SLA": { min: null, max: null } },
+    },
+    machines: {
+      "FDM 3D Printing": { equip: ["FDM"], post: [] },
+      "SLA 3D Printing": { equip: ["SLA"], post: [] },
+    },
+    categories: ["FDM 3D Printing", "SLA 3D Printing"] },
   { name: "Corvallis3D",      url: "https://www.corvallis3d.com",           city: "Beaverton",     state: "OR", quote: "instant",       uber: false, beta: false,
     dims: { "FDM 3D Printing": { "FDM": { min: null, max: null } } },
     machines: {
