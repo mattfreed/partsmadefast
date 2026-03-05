@@ -832,6 +832,12 @@ const manufacturers = [
       "Raw Materials": { equip: ["Big Ass Saw", "Smaller Saws"], post: [] },
     },
     categories: ["Raw Materials"] },
+  { name: "OSH Park",         url: "https://oshpark.com",                   city: "Lake Oswego",   state: "OR", quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "PCB Manufacturing": { equip: [], post: [] },
+    },
+    categories: ["PCB Manufacturing"] },
   { name: "OSH Stencils",     url: "https://www.oshstencils.com",           city: "Provo",         state: "UT", quote: "instant",       uber: false, beta: false,
     dims: { "PCB Stencils": { "Laser Cutter": { min: null, max: null } } },
     machines: {
@@ -1008,6 +1014,9 @@ const allCategories = [
   { name: "Heat Treating",            icon: "🔥" },
   { name: "Metal Surface Treatment",  icon: "✨" },
   { name: "Polymeric & Protective Coatings", icon: "🛡️" },
+  { name: "Powder Coating",           icon: "🎨" },
+  { name: "Anodizing",                icon: "⚗️" },
+  { name: "PCB Manufacturing",         icon: "🟢" },
   { name: "PCBA",                     icon: "🖥️" },
   { name: "PCB Stencils",             icon: "🔲" },
   { name: "Control Panel Fabrication",icon: "🔲" },
