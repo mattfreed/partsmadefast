@@ -810,6 +810,12 @@ const manufacturers = [
       "CNC Milling": { equip: ["3-axis CNC", "5-axis CNC"], post: ["Anodizing", "Tapping", "Deburring"] },
     },
     categories: ["CNC Milling"] },
+  { name: "Symmtrex",         url: "https://symmtrex.com",                  city: null,            state: null, quote: "instant",       uber: false, beta: false,
+    dims: {},
+    machines: {
+      "Structural Framing": { equip: ["Steel Studs"], post: [], equipLabel: "Structural Framing" },
+    },
+    categories: ["Structural Framing"] },
   { name: "McMaster-Carr",    url: "https://www.mcmaster.com",              city: "Elmhurst",      state: "IL", quote: "instant",       uber: false, beta: false,
     dims: {},
     machines: {
@@ -1025,6 +1031,7 @@ const allCategories = [
   { name: "Gear Cutting",             icon: "🔩" },
   { name: "Sheet Metal & Plate Bending", icon: "📐" },
   { name: "Micro Gears",              icon: "⚙️" },
+  { name: "Structural Framing",        icon: "🏗️" },
   { name: "Raw Materials",            icon: "🏗️" },
   { name: "Hardware & Fasteners",     icon: "🔩" },
   { name: "CNC & Machine Tooling",    icon: "🛠️" },
@@ -1213,8 +1220,9 @@ function applyFilters() {
       const addPostBtn  = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','post')">+ Add Post Process</button>`;
       const addMaxBtn   = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','max')">+ Add</button>`;
       const addMinBtn   = `<button class="add-info-btn" onclick="openUpdateModal('${mfrEsc}','${catEsc}','min')">+ Add</button>`;
+      const equipLabel  = (catCaps && catCaps.equipLabel) ? catCaps.equipLabel : 'Machines';
       const machinesHtml = `<div style="display:flex;flex-direction:column;gap:4px;">
-        <div class="mfr-machines"><span class="cap-label">Machines:</span> ${equipList ? equipList + ' ' : ''}${addEquipBtn}</div>
+        <div class="mfr-machines"><span class="cap-label">${equipLabel}:</span> ${equipList ? equipList + ' ' : ''}${addEquipBtn}</div>
         <div class="mfr-machines"><span class="cap-label">Post Processes:</span> ${postList ? postList + ' ' : ''}${addPostBtn}</div>
       </div>`;
 
