@@ -27,6 +27,7 @@
   gtag('js', new Date());
   gtag('config', 'G-VPGSTL8G7D');
 </script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -404,6 +405,15 @@
     footer { padding: 20px 16px; }
     .modal { padding: 24px 16px; }
     .modal-overlay { padding: 12px; }
+
+    /* Map view mobile */
+    #map-header { padding: 10px 14px; gap: 8px; }
+    .map-subtitle { display: none; }
+    .map-header-left { width: 100%; justify-content: space-between; align-items: center; }
+    .map-header-controls { width: 100%; justify-content: space-between; }
+    #map-cat-wrap { flex: 1; }
+    #map-cat-wrap .dropdown-trigger { min-width: 0; width: 100%; }
+    #map-cat-wrap .dropdown-menu { left: 0; right: 0; width: 100%; }
   }
 
   /* FORMS */
@@ -439,6 +449,32 @@
   }
   .form-context strong { color: var(--text); font-weight: 600; }
   .field-hidden { display: none !important; }
+
+  /* MAP VIEW */
+  #map-view-overlay {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: var(--bg); flex-direction: column;
+  }
+  #map-view-overlay.active { display: flex; }
+  #map-header {
+    background: var(--surface); border-bottom: 3px solid var(--accent);
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+    position: relative; z-index: 1000; overflow: visible;
+  }
+  .map-header-left { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+  .map-header-controls { display: flex; gap: 10px; align-items: center; }
+  #map-cat-wrap .dropdown-trigger { min-width: 220px; }
+  #map-view-overlay .dropdown-menu { z-index: 2000; }
+  #map { flex: 1; min-height: 0; }
+.leaflet-popup-content-wrapper { background: #1c1c1c !important; border: 1px solid #e8a020 !important; border-radius: 4px !important; color: #e8e8e8 !important; box-shadow: 0 4px 20px rgba(0,0,0,0.7) !important; }
+  .leaflet-popup-tip { background: #1c1c1c !important; }
+  .leaflet-popup-close-button { color: #888 !important; font-size: 18px !important; top: 6px !important; right: 8px !important; }
+  .leaflet-popup-close-button:hover { color: #fff !important; background: none !important; }
+  .map-popup-name { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: #fff; text-decoration: none; display: block; }
+  .map-popup-name:hover { color: #e8a020; }
+  .map-popup-loc { font-size: 12px; color: #9ca3af; font-family: 'Barlow Condensed', sans-serif; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 3px; }
+  .map-popup-cats { font-size: 12px; color: #bbb; margin-top: 7px; line-height: 1.6; }
 
   .toast {
     position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
@@ -519,6 +555,9 @@
   <!-- Clear -->
   <button class="clear-btn" id="clear-btn" onclick="clearFilters()" style="display:none">✕ Clear filters</button>
 
+  <div style="margin-left:auto;flex-shrink:0;">
+    <button class="btn btn-outline" onclick="openMapView()" style="border-color:var(--accent);">🗺️ Map View</button>
+  </div>
 
 </div>
 
@@ -548,6 +587,32 @@
   <p>🇺🇸 <strong>U.S.A. Parts Made Fast</strong> — A community-curated directory of quick-turn American manufacturers.</p>
   <p style="margin-top:6px;">Something missing? <a href="#" onclick="openSubmitModal();return false;">Submit a manufacturer</a> · <a href="#" onclick="openUpdateModal('','','incorrect');return false;">Report incorrect information</a></p>
 </footer>
+
+<!-- MAP VIEW OVERLAY -->
+<div id="map-view-overlay">
+  <div id="map-header">
+    <div class="map-header-left">
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;color:#fff;letter-spacing:1px;">Manufacturer Map</span>
+      <span class="map-subtitle" style="margin-left:12px;font-size:13px;color:var(--muted);">U.S. quick-turn manufacturer locations</span>
+    </div>
+    <div class="map-header-controls">
+      <div class="dropdown-wrap" id="map-cat-wrap">
+        <div class="dropdown-trigger" id="map-cat-trigger" onclick="toggleDropdown('map-cat')">
+          <span class="selected-val" id="map-cat-label">All Categories</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="dropdown-menu" id="map-cat-menu">
+          <div class="dropdown-search">
+            <input type="text" placeholder="Search category…" oninput="filterDropdownItems('map-cat', this.value)">
+          </div>
+          <div class="dropdown-list" id="map-cat-list"></div>
+        </div>
+      </div>
+      <button onclick="closeMapView()" class="btn btn-outline">✕ Close</button>
+    </div>
+  </div>
+  <div id="map"></div>
+</div>
 
 <!-- SUBMIT MANUFACTURER MODAL -->
 <div class="modal-overlay" id="submit-modal">
@@ -788,7 +853,7 @@ const manufacturers = [
       "Casting & Forging": { equip: ["Investment Casting", "Silicone Mold", "3D Scanner"], post: [] },
     },
     categories: ["Casting & Forging"] },
-  { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "San Francisco", state: "CA", locations: [{city:"San Francisco",state:"CA"},{city:"Austin",state:"TX"}], quote: "instant",       uber: false, beta: false,
+  { name: "Digital Metal",    url: "https://www.digitalmetal.io",           city: "Austin",        state: "TX", quote: "instant",       uber: false, beta: false,
     dims: { "Casting & Forging": { "Investment Casting": { min: null, max: null } } },
     machines: {
       "Casting & Forging": { equip: ["Investment Casting"], post: ["Polishing", "Sandblasting"] },
@@ -1092,6 +1157,14 @@ function selectDropdown(type, value, label) {
       el.classList.toggle('selected', el.dataset.value === (value || '')));
     document.getElementById('process-menu').classList.remove('open');
     document.getElementById('process-trigger').classList.remove('open');
+  } else if (type === 'map-cat') {
+    document.getElementById('map-cat-label').textContent = label;
+    document.querySelectorAll('#map-cat-list .dropdown-item').forEach(el =>
+      el.classList.toggle('selected', el.dataset.value === (value || '')));
+    document.getElementById('map-cat-menu').classList.remove('open');
+    document.getElementById('map-cat-trigger').classList.remove('open');
+    filterMapByCategory(value);
+    return;
   } else {
     selectedState = value;
     document.getElementById('state-label').textContent = label;
@@ -1469,5 +1542,145 @@ applyFilters();
 </script>
 
 <div class="toast" id="toast">Response submitted.</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const CITY_COORDS = {
+  'Reno,NV':           [39.5296, -119.8138],
+  'Graham,NC':         [36.0771, -79.4003],
+  'Ventura,CA':        [34.2746, -119.2290],
+  'Fort Worth,TX':     [32.7555, -97.3308],
+  'Spanish Fork,UT':   [40.1147, -111.6549],
+  'New York,NY':       [40.7128, -74.0060],
+  'San Francisco,CA':  [37.7749, -122.4194],
+  'Berkeley,CA':       [37.8716, -122.2727],
+  'Redwood City,CA':   [37.4852, -122.2364],
+  'Detroit,MI':        [42.3314, -83.0458],
+  'Lake Oswego,OR':    [45.4206, -122.6706],
+  'Provo,UT':          [40.2338, -111.6585],
+  'Kingston,NY':       [41.9270, -73.9974],
+  'Houston,TX':        [29.7604, -95.3698],
+  'Philadelphia,PA':   [39.9526, -75.1652],
+  'El Segundo,CA':     [33.9192, -118.4165],
+  'Austin,TX':         [30.2672, -97.7431],
+  'Oakland,CA':        [37.8044, -122.2712],
+  'San Diego,CA':      [32.7157, -117.1611],
+  'Billerica,MA':      [42.5584, -71.2689],
+  'Orlando,FL':        [28.5383, -81.3792],
+  'Fresno,CA':         [36.7378, -119.7871],
+  'Beaverton,OR':      [45.4871, -122.8037],
+  'Nampa,ID':          [43.5407, -116.5635],
+  'American Falls,ID': [42.7877, -112.8658],
+  'Elmhurst,IL':       [41.8997, -87.9401],
+  'East Jordan,MI':    [45.1578, -85.1243],
+};
+
+let leafletMap = null;
+const allMapMarkers = []; // [{marker, mfr}]
+
+function getMfrCoords(m) {
+  if (m.locations) return m.locations.map(l => CITY_COORDS[`${l.city},${l.state}`]).filter(Boolean);
+  if (!m.city || !m.state) return [];
+  const c = CITY_COORDS[`${m.city},${m.state}`];
+  return c ? [c] : [];
+}
+
+function openMapView() {
+  document.getElementById('map-view-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (!leafletMap) initLeafletMap();
+  else leafletMap.invalidateSize();
+}
+
+function closeMapView() {
+  document.getElementById('map-view-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function filterMapByCategory(cat) {
+  allMapMarkers.forEach(({ marker, mfrs }) => {
+    const visible = !cat || mfrs.some(m => m.categories.includes(cat));
+    if (visible) { if (!leafletMap.hasLayer(marker)) marker.addTo(leafletMap); }
+    else          { if (leafletMap.hasLayer(marker))  marker.remove(); }
+  });
+}
+
+function makeQuoteTag(m) {
+  return m.quote === 'instant'
+    ? '<span class="tag tag-instant" style="font-size:11px">⚡ Instant Quote</span>'
+    : m.quote === 'online-manual'
+    ? '<span class="tag tag-online-manual" style="font-size:11px">🖥️ Online Platform</span>'
+    : '<span class="tag tag-email" style="font-size:11px">✉️ Email / Form</span>';
+}
+
+function initLeafletMap() {
+  leafletMap = L.map('map', { zoomControl: true }).setView([38.5, -96], 4);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 18,
+  }).addTo(leafletMap);
+
+  // Group manufacturers by coordinate
+  const coordGroups = new Map();
+  manufacturers.forEach(m => {
+    getMfrCoords(m).forEach(coords => {
+      const key = coords.join(',');
+      if (!coordGroups.has(key)) coordGroups.set(key, { coords, mfrs: [] });
+      coordGroups.get(key).mfrs.push(m);
+    });
+  });
+
+  coordGroups.forEach(({ coords, mfrs }) => {
+    const isMulti = mfrs.length > 1;
+    const marker = L.circleMarker(coords, {
+      radius: isMulti ? 13 : 9,
+      fillColor: '#e8a020',
+      color: '#000', weight: 1.5,
+      opacity: 1, fillOpacity: 0.85,
+    }).addTo(leafletMap);
+
+    const loc = [mfrs[0].city, mfrs[0].state].filter(Boolean).join(', ');
+
+    let popupHtml;
+    if (isMulti) {
+      popupHtml =
+        `<div class="map-popup-loc" style="margin-bottom:10px">📍 ${loc} &mdash; <strong style="color:#e8a020">${mfrs.length} manufacturers</strong></div>` +
+        mfrs.map((m, i) => `
+          ${i > 0 ? '<hr style="border:none;border-top:1px solid #2a2a2a;margin:10px 0">' : ''}
+          <a class="map-popup-name" href="${m.url}" target="_blank" rel="noopener">${m.name}</a>
+          <div style="margin-top:4px">${makeQuoteTag(m)}</div>
+          <div class="map-popup-cats">${m.categories.join(' · ')}</div>
+        `).join('');
+    } else {
+      const m = mfrs[0];
+      popupHtml = `
+        <a class="map-popup-name" href="${m.url}" target="_blank" rel="noopener">${m.name}</a>
+        ${loc ? `<div class="map-popup-loc">📍 ${loc}</div>` : ''}
+        <div style="margin-top:6px">${makeQuoteTag(m)}</div>
+        <div class="map-popup-cats">${m.categories.join(' · ')}</div>
+      `;
+    }
+
+    const popupWidth = Math.min(300, window.innerWidth - 40);
+    marker.bindPopup(popupHtml, { maxWidth: popupWidth, minWidth: Math.min(220, popupWidth) });
+    marker.on('mouseover', function() { this.openPopup(); });
+    marker.on('click',     function() { this.openPopup(); });
+
+    allMapMarkers.push({ marker, mfrs });
+  });
+
+  // Populate category dropdown — only categories with a mapped manufacturer
+  const mappedCats = new Set();
+  allMapMarkers.forEach(({ mfrs }) => mfrs.forEach(m => m.categories.forEach(c => mappedCats.add(c))));
+  const mapCatList = document.getElementById('map-cat-list');
+  mapCatList.innerHTML =
+    `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('map-cat',null,'All Categories')">All Categories</div>` +
+    allCategories
+      .filter(c => mappedCats.has(c.name))
+      .map(c => `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('map-cat','${c.name.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">${c.name}</div>`)
+      .join('');
+}
+</script>
 </body>
 </html>
