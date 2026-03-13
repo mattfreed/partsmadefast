@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>U.S.A. Parts Made Fast</title>
 <link rel="icon" type="image/svg+xml" href="Flag_of_the_United_States.svg">
 
@@ -130,7 +130,7 @@
   }
   .search-wrap input {
     width: 100%; background: #1a1a1a;
-    border: 1.5px solid var(--accent); border-radius: 4px;
+    border: 1.5px solid #444; border-radius: 4px;
     color: var(--text); font-family: 'Barlow', sans-serif;
     font-size: 14px; padding: 8px 12px 8px 32px; outline: none;
     transition: border-color 0.15s;
@@ -142,7 +142,7 @@
   .dropdown-wrap { position: relative; }
   .dropdown-trigger {
     display: flex; align-items: center; gap: 8px;
-    background: #1a1a1a; border: 1.5px solid var(--accent);
+    background: #1a1a1a; border: 1.5px solid #444;
     border-radius: 4px; color: #ccc;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
@@ -419,6 +419,13 @@
     .dropdown-wrap { flex: 1; }
     .dropdown-trigger { min-width: 0; width: 100%; }
     .result-bar { order: 99; width: 100%; margin-left: 0; font-size: 12px; }
+    /* Center map/reads buttons on mobile */
+    .toolbar > div:last-child { margin-left: 0 !important; width: 100%; justify-content: center; }
+    /* Prevent iOS zoom on input focus */
+    .search-wrap input, .dropdown-search input, .form-group input, .form-group textarea, .form-group select { font-size: 16px !important; }
+    .dropdown-trigger { font-size: 16px !important; }
+    /* Reads popover full width on mobile */
+    #reads-popover { position: fixed; bottom: auto; top: 50%; left: 50%; right: auto; transform: translate(-50%, -50%); min-width: 0; width: calc(100% - 32px); max-width: 340px; }
 
     main { padding: 24px 16px 60px; }
     .category-title { font-size: 22px; }
@@ -579,9 +586,8 @@
 
 </div>
 
-<!-- BETA DISCLAIMER -->
-<p style="text-align:center; padding: 6px 40px 0; font-size:14px; color:var(--accent);">Manufacturers marked <strong>Beta</strong> may be in closed beta or not yet at full production capacity.</p>
-<p style="text-align:center; padding: 4px 40px 0; font-size:13px; color:#d0d0d0; letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>
+<!-- DISCLAIMER -->
+<p style="text-align:center; padding: 6px 40px 0; font-size:13px; color:#d0d0d0; letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>
 
 <!-- MAIN -->
 <main id="main-content"></main>
@@ -1146,7 +1152,7 @@ function buildDropdowns() {
   const procList = document.getElementById('process-list');
   procList.innerHTML =
     `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('process',null,'All Processes')">All Processes</div>` +
-    allCategories.map(c =>
+    allCategories.filter(c => manufacturers.some(m => m.categories.includes(c.name))).map(c =>
       `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">${c.name}</div>`
     ).join('');
 
