@@ -130,7 +130,7 @@
   }
   .search-wrap input {
     width: 100%; background: #1a1a1a;
-    border: 1.5px solid #444; border-radius: 4px;
+    border: 1.5px solid var(--accent); border-radius: 4px;
     color: var(--text); font-family: 'Barlow', sans-serif;
     font-size: 14px; padding: 8px 12px 8px 32px; outline: none;
     transition: border-color 0.15s;
@@ -142,7 +142,7 @@
   .dropdown-wrap { position: relative; }
   .dropdown-trigger {
     display: flex; align-items: center; gap: 8px;
-    background: #1a1a1a; border: 1.5px solid #444;
+    background: #1a1a1a; border: 1.5px solid var(--accent);
     border-radius: 4px; color: #ccc;
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 15px; font-weight: 600; letter-spacing: 0.3px;
@@ -377,6 +377,33 @@
 
   @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
+  /* Good Reads popover */
+  #reads-popover {
+    position: absolute; top: 100%; right: 0; z-index: 901;
+    background: var(--surface2); border: 1px solid var(--accent);
+    border-radius: 6px; padding: 16px 20px; min-width: 280px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+    display: none; animation: fadeIn 0.15s ease;
+    margin-top: 6px;
+  }
+  #reads-popover.active { display: block; }
+  #reads-popover h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 14px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: #d0d0d0; margin-bottom: 12px;
+  }
+  .reads-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 4px; text-decoration: none;
+    color: #fff; font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px; font-weight: 600; transition: background 0.15s;
+    border: 1px solid var(--border);
+  }
+  .reads-link:hover { background: var(--surface3); border-color: var(--accent); }
+  .reads-link + .reads-link { margin-top: 8px; }
+  .reads-link span.reads-icon { font-size: 18px; flex-shrink: 0; }
+  .reads-link small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
 
   @media (max-width: 768px) {
     header { padding: 20px; }
@@ -531,33 +558,23 @@
     </div>
   </div>
 
-  <!-- State dropdown -->
-  <div class="dropdown-wrap" id="state-wrap">
-    <div class="dropdown-trigger" id="state-trigger" onclick="toggleDropdown('state')">
-      <span class="selected-val" id="state-label">All States</span>
-      <span class="arrow">▼</span>
-    </div>
-    <div class="dropdown-menu" id="state-menu">
-      <div class="dropdown-search">
-        <input type="text" placeholder="Search state…" oninput="filterDropdownItems('state', this.value)">
-      </div>
-      <div class="dropdown-list" id="state-list"></div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- Instant quote toggle -->
-  <button class="btn btn-instant" id="instant-btn" onclick="toggleInstant()">⚡ Instant Quote Only</button>
-
-  <!-- Uber carrier toggle -->
-  <button class="btn btn-uber" id="uber-btn" onclick="toggleUber()">🚗 Uber Courier Available</button>
-
   <!-- Clear -->
   <button class="clear-btn" id="clear-btn" onclick="clearFilters()" style="display:none">✕ Clear filters</button>
 
-  <div style="margin-left:auto;flex-shrink:0;">
+  <div style="margin-left:auto;flex-shrink:0;display:flex;gap:8px;position:relative;">
     <button class="btn btn-outline" onclick="openMapView()" style="border-color:var(--accent);">🗺️ Map View</button>
+    <button class="btn btn-outline" id="reads-btn" onclick="toggleReadsPopover()" style="border-color:var(--accent);">📖 Good Reads</button>
+    <div id="reads-popover">
+      <h3>Good Reads</h3>
+      <a class="reads-link" href="https://www.bannedincalifornia.org/" target="_blank" rel="noopener">
+        <span class="reads-icon">🚫</span>
+        <div>Banned in California<small>What's illegal to manufacture in CA</small></div>
+      </a>
+      <a class="reads-link" href="https://x.com/aphysicist/status/2028308559088214208?s=20" target="_blank" rel="noopener">
+        <span class="reads-icon">🏭</span>
+        <div>How to Build American Shenzhen, Fast<small>@aphysicist</small></div>
+      </a>
+    </div>
   </div>
 
 </div>
@@ -1133,13 +1150,6 @@ function buildDropdowns() {
       `<div class="dropdown-item" data-value="${c.name}" onclick="selectDropdown('process','${c.name.replace(/'/g,"\\'")}','${c.name.replace(/'/g,"\\'")}')">${c.name}</div>`
     ).join('');
 
-  const states = [...new Set(manufacturers.flatMap(m => m.locations ? m.locations.map(l => l.state) : [m.state]))].sort();
-  const stateList = document.getElementById('state-list');
-  stateList.innerHTML =
-    `<div class="dropdown-item all-option selected" data-value="" onclick="selectDropdown('state',null,'All States')">All States</div>` +
-    states.map(s =>
-      `<div class="dropdown-item" data-value="${s}" onclick="selectDropdown('state','${s}','📍 ${s}')">📍 ${s}</div>`
-    ).join('');
 }
 
 function toggleDropdown(id) {
@@ -1172,13 +1182,6 @@ function selectDropdown(type, value, label) {
     document.getElementById('map-cat-trigger').classList.remove('open');
     filterMapByCategory(value);
     return;
-  } else {
-    selectedState = value;
-    document.getElementById('state-label').textContent = label;
-    document.querySelectorAll('#state-list .dropdown-item').forEach(el =>
-      el.classList.toggle('selected', el.dataset.value === (value || '')));
-    document.getElementById('state-menu').classList.remove('open');
-    document.getElementById('state-trigger').classList.remove('open');
   }
   applyFilters();
 }
@@ -1189,6 +1192,10 @@ function filterDropdownItems(id, query) {
     if (el.classList.contains('all-option')) { el.style.display = ''; return; }
     el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none';
   });
+}
+
+function toggleReadsPopover() {
+  document.getElementById('reads-popover').classList.toggle('active');
 }
 
 function toggleInstant() {
@@ -1207,11 +1214,9 @@ function clearFilters() {
   selectedProcess = null; selectedState = null; instantOnly = false; uberOnly = false;
   document.getElementById('search-input').value = '';
   document.getElementById('process-label').textContent = 'All Processes';
-  document.getElementById('state-label').textContent   = 'All States';
   document.getElementById('instant-btn').classList.remove('active');
   document.getElementById('uber-btn').classList.remove('active');
   document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
-  document.querySelectorAll('#state-list .dropdown-item').forEach(el  => el.classList.toggle('selected', el.dataset.value === ''));
   applyFilters();
 }
 
@@ -1390,6 +1395,9 @@ document.addEventListener('click', e => {
   if (!e.target.closest('.dropdown-wrap')) {
     document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
     document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('open'));
+  }
+  if (!e.target.closest('#reads-btn') && !e.target.closest('#reads-popover')) {
+    document.getElementById('reads-popover').classList.remove('active');
   }
 });
 
