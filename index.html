@@ -588,11 +588,10 @@
 
 </div>
 
-<!-- DISCLAIMER -->
-<p style="text-align:center; padding: 6px 40px 0; font-size:13px; color:#d0d0d0; letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>
-
 <!-- MAIN -->
-<main id="main-content"></main>
+<main id="main-content">
+  <p id="disclaimer" style="text-align:center; padding: 6px 40px 8px; font-size:13px; color:#d0d0d0; letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>
+</main>
 
 <!-- REQUEST PROCESS -->
 <div style="text-align:center; padding: 16px 40px 60px;">
@@ -1225,7 +1224,10 @@ function applyFilters() {
     document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
   }
   const isFiltered = selectedProcess || query;
-  document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const toolbar = document.querySelector('.toolbar');
+  const mainTop = document.getElementById('main-content').getBoundingClientRect().top + window.scrollY;
+  const offset = toolbar.offsetHeight + 8;
+  window.scrollTo({ top: mainTop - offset, behavior: 'smooth' });
 
   const catsShuffled = shuffle(selectedProcess
     ? allCategories.filter(c => c.name === selectedProcess)
@@ -1374,12 +1376,13 @@ function applyFilters() {
       </div>`;
   }).join('');
 
-  document.getElementById('main-content').innerHTML = html ||
+  const disclaimer = '<p id="disclaimer" style="text-align:center; padding: 6px 40px 8px; font-size:13px; color:#d0d0d0; letter-spacing:0.3px;">Categories and manufacturers are reshuffled on every page load — no placement is paid or permanent.</p>';
+  document.getElementById('main-content').innerHTML = disclaimer + (html ||
     `<div class="empty-state">
        <div class="empty-icon">🔍</div>
        <h3>No manufacturers match your filters</h3>
-       <p>Try broadening your search or <button class="clear-btn" onclick="clearFilters()">clear filters</button>.</p>
-     </div>`;
+       <p>Try broadening your search.</p>
+     </div>`);
 
 }
 
@@ -1554,6 +1557,8 @@ async function submitMfrForm() {
 // ── INIT ──
 buildDropdowns();
 applyFilters();
+window.history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
 
 </script>
 
