@@ -565,9 +565,6 @@
     </div>
   </div>
 
-  <!-- Clear -->
-  <button class="clear-btn" id="clear-btn" onclick="clearFilters()" style="display:none">✕ Clear filters</button>
-
   <div style="margin-left:auto;flex-shrink:0;display:flex;gap:8px;position:relative;">
     <button class="btn btn-outline" onclick="openMapView()" style="border-color:var(--accent);">🗺️ Map View</button>
     <button class="btn btn-outline" id="reads-btn" onclick="toggleReadsPopover()" style="border-color:var(--accent);">📖 Good Reads</button>
@@ -1181,6 +1178,7 @@ function selectDropdown(type, value, label) {
   if (type === 'process') {
     selectedProcess = value;
     document.getElementById('process-label').textContent = label;
+    document.getElementById('search-input').value = '';
     document.querySelectorAll('#process-list .dropdown-item').forEach(el =>
       el.classList.toggle('selected', el.dataset.value === (value || '')));
     document.getElementById('process-menu').classList.remove('open');
@@ -1209,24 +1207,11 @@ function toggleReadsPopover() {
   document.getElementById('reads-popover').classList.toggle('active');
 }
 
-function toggleInstant() {
-  instantOnly = !instantOnly;
-  document.getElementById('instant-btn').classList.toggle('active', instantOnly);
-  applyFilters();
-}
-
-function toggleUber() {
-  uberOnly = !uberOnly;
-  document.getElementById('uber-btn').classList.toggle('active', uberOnly);
-  applyFilters();
-}
 
 function clearFilters() {
   selectedProcess = null; selectedState = null; instantOnly = false; uberOnly = false;
   document.getElementById('search-input').value = '';
   document.getElementById('process-label').textContent = 'All Processes';
-  document.getElementById('instant-btn').classList.remove('active');
-  document.getElementById('uber-btn').classList.remove('active');
   document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
   applyFilters();
 }
@@ -1234,9 +1219,13 @@ function clearFilters() {
 // ── RENDER ──
 function applyFilters() {
   const query = document.getElementById('search-input').value.toLowerCase().trim();
-  const isFiltered = selectedProcess || selectedState || instantOnly || uberOnly || query;
-  document.getElementById('clear-btn').style.display = isFiltered ? '' : 'none';
-  document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (query && selectedProcess) {
+    selectedProcess = null;
+    document.getElementById('process-label').textContent = 'All Processes';
+    document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
+  }
+  const isFiltered = selectedProcess || query;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const catsShuffled = shuffle(selectedProcess
     ? allCategories.filter(c => c.name === selectedProcess)
