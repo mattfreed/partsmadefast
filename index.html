@@ -1225,7 +1225,7 @@ function applyFilters() {
     document.querySelectorAll('#process-list .dropdown-item').forEach(el => el.classList.toggle('selected', el.dataset.value === ''));
   }
   const isFiltered = selectedProcess || query;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelector('.toolbar').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const catsShuffled = shuffle(selectedProcess
     ? allCategories.filter(c => c.name === selectedProcess)
