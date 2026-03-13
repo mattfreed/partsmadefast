@@ -425,7 +425,7 @@
     .search-wrap input, .dropdown-search input, .form-group input, .form-group textarea, .form-group select { font-size: 16px !important; }
     .dropdown-trigger { font-size: 16px !important; }
     /* Reads popover full width on mobile */
-    #reads-popover { position: fixed; bottom: auto; top: 50%; left: 50%; right: auto; transform: translate(-50%, -50%); min-width: 0; width: calc(100% - 32px); max-width: 340px; }
+    #reads-popover { min-width: 0; width: calc(100vw - 32px); max-width: 340px; right: -8px; }
 
     main { padding: 24px 16px 60px; }
     .category-title { font-size: 22px; }
@@ -572,6 +572,7 @@
     <button class="btn btn-outline" onclick="openMapView()" style="border-color:var(--accent);">🗺️ Map View</button>
     <button class="btn btn-outline" id="reads-btn" onclick="toggleReadsPopover()" style="border-color:var(--accent);">📖 Good Reads</button>
     <div id="reads-popover">
+      <button onclick="toggleReadsPopover()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1;">✕</button>
       <h3>Good Reads</h3>
       <a class="reads-link" href="https://www.bannedincalifornia.org/" target="_blank" rel="noopener">
         <span class="reads-icon">🚫</span>
@@ -580,6 +581,10 @@
       <a class="reads-link" href="https://x.com/aphysicist/status/2028308559088214208?s=20" target="_blank" rel="noopener">
         <span class="reads-icon">🏭</span>
         <div>How to Build American Shenzhen, Fast<small>@aphysicist</small></div>
+      </a>
+      <a class="reads-link" href="https://x.com/jimbelosic/status/1863311802102374853?s=20" target="_blank" rel="noopener">
+        <span class="reads-icon">🇺🇸</span>
+        <div>A Bootstrapper's Guide to Re-Industrializing America<small>@jimbelosic</small></div>
       </a>
     </div>
   </div>
@@ -1231,6 +1236,7 @@ function applyFilters() {
   const query = document.getElementById('search-input').value.toLowerCase().trim();
   const isFiltered = selectedProcess || selectedState || instantOnly || uberOnly || query;
   document.getElementById('clear-btn').style.display = isFiltered ? '' : 'none';
+  document.getElementById('main-content').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   const catsShuffled = shuffle(selectedProcess
     ? allCategories.filter(c => c.name === selectedProcess)
