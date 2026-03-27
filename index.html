@@ -1067,6 +1067,20 @@ const manufacturers = [
       "FDM 3D Printing": { equip: ["FDM"], post: ["Support Removal", "Post-Curing"] },
     },
     categories: ["MJF 3D Printing", "SLS 3D Printing", "SLA 3D Printing", "FDM 3D Printing"] },
+  { name: "Makelab, Inc",      url: "https://makelab.com",                    city: "Brooklyn",      state: "NY", quote: "instant",       uber: false, beta: false,
+    dims: {
+      "MJF 3D Printing": { "MJF": { min: null, max: null } },
+      "SLA 3D Printing": { "SLA": { min: null, max: null } },
+      "FDM 3D Printing": { "FDM": { min: null, max: null } },
+      "FGF 3D Printing": { "FGF": { min: null, max: null } },
+    },
+    machines: {
+      "MJF 3D Printing": { equip: ["MJF"], post: [] },
+      "SLA 3D Printing": { equip: ["SLA"], post: [] },
+      "FDM 3D Printing": { equip: ["FDM"], post: [] },
+      "FGF 3D Printing": { equip: ["FGF"], post: [] },
+    },
+    categories: ["MJF 3D Printing", "SLA 3D Printing", "FDM 3D Printing", "FGF 3D Printing"] },
 ];
 
 const SYNONYMS = {
@@ -1120,6 +1134,7 @@ const allCategories = [
   { name: "SLS 3D Printing",          icon: "🖨️" },
   { name: "SLA 3D Printing",          icon: "🖨️" },
   { name: "MJF 3D Printing",          icon: "🖨️" },
+  { name: "FGF 3D Printing",          icon: "🖨️" },
   { name: "Injection Molding",        icon: "🧪" },
   { name: "Thermoforming",            icon: "🌡️" },
   { name: "Metal Forming",            icon: "🔩" },
@@ -1598,6 +1613,7 @@ const CITY_COORDS = {
   'American Falls,ID': [42.7877, -112.8658],
   'Elmhurst,IL':       [41.8997, -87.9401],
   'East Jordan,MI':    [45.1578, -85.1243],
+  'Brooklyn,NY':       [40.6782, -73.9442],
 };
 
 let leafletMap = null;
