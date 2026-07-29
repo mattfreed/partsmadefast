@@ -1,17 +1,17 @@
 Name,URL,City,State,Quote,Uber,Beta,Category,Equipment,Post Processes,Min Size,Max Size
-SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | CO2 Laser | Press Brake,Bending | Powder Coating | Anodizing | Zinc Plating | Tapping | Hardware Insertion | Countersinking | Dimple Forming | Deburring,"1"" x 1""","44"" x 30"""
-SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,Waterjet Cutting,Waterjet,Bending | Powder Coating | Anodizing | Zinc Plating | Tapping | Hardware Insertion | Countersinking | Deburring,"1"" x 1""","44"" x 30"""
-SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,CNC Milling,5-axis CNC,Powder Coating | Anodizing | Zinc Plating | Tapping | Deburring,see per-machine dims,see per-machine dims
+SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | CO2 Laser | Press Brake,Bending | Powder Coating | Anodizing | Zinc Plating | Tapping | Hardware Insertion | Countersinking | Dimple Forming | Deburring | Welding,"1"" x 1""","44"" x 30"""
+SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,Waterjet Cutting,Waterjet,Bending | Powder Coating | Anodizing | Zinc Plating | Tapping | Hardware Insertion | Countersinking | Deburring | Welding,"1"" x 1""","44"" x 30"""
+SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,CNC Milling,5-axis CNC,Powder Coating | Anodizing | Zinc Plating | Tapping | Deburring | Welding,see per-machine dims,see per-machine dims
 SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,CNC Milling (5-axis CNC),,,,"1"" x 1"" x 1""","7"" x 7"" x 12"""
-SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,CNC Routing,CNC Router,Powder Coating | Anodizing | Zinc Plating | Tapping | Deburring,"1"" x 2""","30"" x 44"""
+SendCutSend,https://sendcutsend.com,Reno,NV,instant,FALSE,FALSE,CNC Routing,CNC Router,Powder Coating | Anodizing | Zinc Plating | Tapping | Deburring | Welding,"1"" x 2""","30"" x 44"""
 Fabworks,https://www.fabworks.com,Ventura,CA,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | Press Brake,Bending | Powder Coating | Tapping | Hardware Insertion | Countersinking,,"60"" x 120"""
 Fabworks,https://www.fabworks.com,Ventura,CA,instant,FALSE,FALSE,Tube Cutting,Tube Laser,Powder Coating | Bending | Tapping | Hardware Insertion | Countersinking | Deburring,,
 Fabworks,https://www.fabworks.com,Ventura,CA,instant,FALSE,TRUE (category only),Welding,MIG Welder | TIG Welder,Tapping | Hardware Insertion | Countersinking,,
 RMFG,https://www.rmfg.com,Fort Worth,TX,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | Press Brake,Bending | Tapping | Hardware Insertion | Countersinking | Deburring,,"48"" x 96"""
 RMFG,https://www.rmfg.com,Fort Worth,TX,instant,FALSE,FALSE,Welding,MIG Welder | TIG Welder,Tapping | Hardware Insertion | Countersinking,,
-OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | Press Brake,Bending | Powder Coating | Bead Blasting | Tumbling | Tapping | Hardware Insertion | Countersinking | Deburring,"1"" x 1""","60"" x 120"""
-OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Tube Cutting,Tube Laser,Powder Coating | Bead Blasting | Tumbling | Tapping | Deburring,,"10"" diameter"
-OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Tube & Pipe Bending,CNC Tube Bender,Tube Bending | Powder Coating | Bead Blasting | Deburring,"0.75"" OD","1.5"" OD"
+OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Laser Cutting,Fiber Laser | Press Brake,Bending | Powder Coating | Bead Blasting | Tumbling | Tapping | Hardware Insertion | Countersinking | Deburring | Welding,"1"" x 1""","60"" x 120"""
+OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Tube Cutting,Tube Laser,Powder Coating | Bead Blasting | Tumbling | Tapping | Deburring | Welding,,"10"" diameter"
+OSH Cut,https://www.oshcut.com,Columbus,OH,instant,FALSE,FALSE,Tube & Pipe Bending,CNC Tube Bender,Tube Bending | Powder Coating | Bead Blasting | Deburring | Welding,"0.75"" OD","1.5"" OD"
 Digital Metal,https://www.digitalmetal.io,San Francisco,CA,instant,FALSE,FALSE,Casting & Forging,Investment Casting,Polishing | Sandblasting,,"~19.7"" (500mm)"
 FinalRev,https://www.finalrev.com,Berkeley,CA,online-manual,TRUE,TRUE,Laser Cutting,Fiber Laser,Countersinking | Tapping,,
 FinalRev,https://www.finalrev.com,Berkeley,CA,online-manual,TRUE,TRUE,Waterjet Cutting,Waterjet,Countersinking | Tapping,,
@@ -46,3 +46,8 @@ ACP Waterjet,https://www.acpwaterjet.com,Littleton,MA,instant,FALSE,FALSE,Laser 
 ACP Waterjet,https://www.acpwaterjet.com,Littleton,MA,instant,FALSE,FALSE,Waterjet Cutting,,,,
 RapidAxis,https://rapidaxis.com,Redwood City,CA,online-manual,FALSE,FALSE,Injection Molding,,,,
 CableFlow,https://www.cableflow.io,Boston,MA,online-manual,FALSE,FALSE,Cable Harnessing,,,,
+TNutz,https://www.tnutz.com,Champlain,NY,instant,FALSE,FALSE,Structural Framing,Aluminum T-Slot Extrusion,,,
+Atomic Factories,https://atomicfactories.com,,,instant,FALSE,FALSE,3D Printing (LPBF),LPBF,,,
+"Imagineering, Inc.",https://www.pcbnet.com,Elk Grove Village,IL,instant,FALSE,FALSE,PCB Manufacturing,,,,
+"Imagineering, Inc.",https://www.pcbnet.com,Elk Grove Village,IL,instant,FALSE,FALSE,PCBA,,,,
+SnapFab,https://snapfab.com,San Francisco,CA,instant,FALSE,FALSE,Injection Molding,,,,
